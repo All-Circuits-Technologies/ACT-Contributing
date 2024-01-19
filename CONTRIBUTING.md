@@ -12,6 +12,12 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
   - [Table of contents](#table-of-contents)
   - [REUSE](#reuse)
   - [Coding standards](#coding-standards)
+  - [Pull and merge request](#pull-and-merge-request)
+    - [Global](#global)
+    - [GitHub](#github)
+      - [Repositories members](#repositories-members)
+      - [External contributors](#external-contributors)
+    - [GitLab](#gitlab)
   - [Code of Conduct](#code-of-conduct)
     - [Our Pledge](#our-pledge)
     - [Our Standards](#our-standards)
@@ -34,7 +40,7 @@ Therefore,
 
 - You MUST to:
   - [ ] Add a SPDX header or add an attached license file to all the files you add in the projet
-  - [ ] Respect the licensing of the code you include in this repository
+  - [ ] Respect the licensing of the file you include in this repository
 - You MIGHT to:
   - [ ] Add your name and mail address in the SPDX header or attached license file of all the files
   you update
@@ -46,6 +52,34 @@ When you add a SPDX license on a file, you HAVE to:
 ## Coding standards
 
 Read: [coding standards](software/CODING-STANDARDS.md)
+
+## Pull and merge request
+
+### Global
+
+Each pull or merge request, must be linked with a task/issue.
+See: [RG10](#rg10---feature-related-code)
+
+You can't merge to the "stable" branch without a review done by an "authorized" reviewer.
+
+### GitHub
+
+#### Repositories members
+
+To add new elements or update existing one, you have to create a temporary branch like recommended
+in the Global coding standards:
+[RG8](software/GLOBAL-CODING-STANDARDS.md#rg8---work-in-development-branches).
+
+#### External contributors
+
+To add new elements or update existing one, you create a fork project to merge to the repository
+"master" branch.
+
+### GitLab
+
+To add new elements or update existing one, you have to create a temporary branch like recommended
+in the Global coding standards:
+[RG8](software/GLOBAL-CODING-STANDARDS.md#rg8---work-in-development-branches).
 
 ## Code of Conduct
 

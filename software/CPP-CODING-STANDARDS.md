@@ -51,6 +51,13 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
   - [C++11 code standards](#c11-code-standards)
     - [RCPP11-1 - Use iterators](#rcpp11-1---use-iterators)
     - [RCPP11-2 - Use constant iterators](#rcpp11-2---use-constant-iterators)
+    - [RCPP11-3 - Virtual method override](#rcpp11-3---virtual-method-override)
+    - [RCPP11-4 - Attributes default initialization](#rcpp11-4---attributes-default-initialization)
+    - [RCPP11-5 - Use nullptr](#rcpp11-5---use-nullptr)
+    - [RCPP11-6 - Default pointer initialization](#rcpp11-6---default-pointer-initialization)
+    - [RCPP11-7 - Constant values](#rcpp11-7---constant-values)
+    - [RCPP11-8 - constexpr, constant values and literal type](#rcpp11-8---constexpr-constant-values-and-literal-type)
+    - [RCPP11-9 - Global constant values](#rcpp11-9---global-constant-values)
 
 ## Introduction
 
@@ -1150,3 +1157,182 @@ for(vector<int>::const_iterator citer = myVector.begin(); citer != myVector.end(
 > `const_iterator`, they will return a constant value.
 > This is also true in Qt, but we prefer to use the methods `constBegin()`, `cbegin()` and
 > `constEnd()`, `cend()`, to clearly mark the difference.
+
+### RCPP11-3 - Virtual method override
+
+- Severity: **Blocking**
+
+All derived class methods that override virtual methods must have an `override` suffix.
+
+Example:
+
+```cpp
+class BaseClass
+{
+    public:
+        virtual ~BaseClass();
+
+    protected:
+        virtual void myMethod();
+
+        virtual void specificMethod() = 0;
+};
+
+class DerivedClass : public BaseClass
+{
+    public:
+        virtual ~DerivedClass() override;
+
+    protected:
+        virtual void myMethod() override;
+
+        virtual void specificMethod() override;
+};
+```
+
+> [!NOTE]
+> The keyword "override" is just a safeguard. It simply validates that the method which is
+> overloaded is indeed virtual (otherwise, an error is produced by the compiler).
+>
+> For further reading on the subject: https://en.cppreference.com/w/cpp/language/override
+
+> [!NOTE]
+> The destructor must also be overriden for consistency.
+>
+> For further reading on the subject:
+> - https://stackoverflow.com/a/54694226
+> - https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-override
+
+### RCPP11-4 - Attributes default initialization
+
+- Severity: Non-blocking
+
+When **attributes** have **default values** _​​(true for all constructors)_, these values **​​must be
+put in the header rather than in the constructors**.
+
+This allows you to avoid making mistakes when adding new constructors, or when you want to change
+the value.
+
+Example:
+
+```cpp
+class MyClass
+{
+    private:
+        int _myValue{0};
+        bool _myTest{false};
+};
+```
+
+### RCPP11-5 - Use nullptr
+
+- Severity: **Blocking**
+
+The keyword: `nullptr`, must always be used to nullify a pointer or test its nullity.
+
+From C++11, it's better to user `nullptr` instead of `0`, or macro returning `0` like `NULL`.
+
+Example:
+
+```cpp
+MyClass *myClassPtr = nullptr;
+
+if(myClassPtr == nullptr)
+{
+    // Do something clever
+}
+```
+
+### RCPP11-6 - Default pointer initialization
+
+- Severity: **Blocking**
+- Overload: [RCPP34](#rcpp34---default-pointer-initialization)
+
+**All pointers** that **do not point to a created instance must be initialized with `nullptr`**.
+
+Examples:
+
+```cpp
+class OtherClass;
+
+class MyClass
+{
+    private:
+        OtherClass *_otherClass = nullptr;
+};
+```
+
+```cpp
+OtherClass *otherClass = nullptr;
+OtherClass *anotherClass = new OtherClass();
+```
+
+### RCPP11-7 - Constant values
+
+- Severity: **Blocking**
+
+Constant values must be defined by `static const` rather than macros (`#define`).
+
+Example:
+
+✅ **good:**
+
+```cpp
+class MyClass
+{
+    private:
+        static const constexpr int TimerValueInMs{0};
+};
+```
+
+❌ **bad:**
+
+```cpp
+#define TIMER_VALUE_IN_MS (0)
+
+class MyClass
+{
+};
+```
+
+### RCPP11-8 - constexpr, constant values and literal type
+
+- Severity: **Blocking**
+
+All constant values ​​that are "Literal types" must be "`constexpr`".
+
+Example:
+
+```cpp
+class MyClass
+{
+    private:
+        static const constexpr bool DefaultBoolValue{false};
+};
+```
+
+> [!NOTE]
+> The `constexpr` keyword lets the compiler know that the constant value can be assigned at
+> compilation (rather than at code execution).
+>
+> For further reading on the subject:
+> https://docs.microsoft.com/en-us/cpp/cpp/constexpr-cpp?view=msvc-160
+
+### RCPP11-9 - Global constant values
+
+- Severity: Non-blocking
+
+All global constant values ​​of a project should be stored in dedicated header files and specific
+namespaces.
+
+Example:
+
+```cpp
+namespace ProjectConstants
+{
+    namespace Database
+    {
+        static const constexpr int DdAddressPort{5520};
+    };
+};
+```

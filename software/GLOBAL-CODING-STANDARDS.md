@@ -164,8 +164,8 @@ _It is as important to not forget features as to not add extra features which ar
 
 Since code is developed against features and these features are represented by task or issue in
 your tasks/issues tracker.
-**You must update the task/issue with the progress of your development** (you begin to work on it, it's
-in review by a peer, it's merged in stable branch, etc.).
+**You must update the task/issue with the progress of your development** (you begin to work on it,
+it's in review by a peer, it's merged in stable branch, etc.).
 
 ### RG12 - Working code
 
@@ -291,7 +291,7 @@ SPDX-License-Identifier:LicenseRef-ALLCircuits-ACT-XZ
 ```
 
 This header has to be commented according to the language, i.e. prefixed with `//` for C/C++
-languages ​​and `# ` for Python and shell languages ​​for example, and with the updated license version
+languages ​​and `#` for Python and shell languages ​​for example, and with the updated license version
 if necessary.
 
 Binary or non-commentable files must be accompanied by a file `xxxx.license` that contains this
