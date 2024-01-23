@@ -38,14 +38,14 @@ our projects.
 
 Therefore,
 
-- You MUST to:
+- You MUST:
   - [ ] Add a SPDX header or add an attached license file to all the files you add in the projet
   - [ ] Respect the licensing of the file you include in this repository
-- You MIGHT to:
+- You SHOULD:
   - [ ] Add your name and mail address in the SPDX header or attached license file of all the files
   you update
 
-When you add a SPDX license on a file, you HAVE to:
+When you add a SPDX license on a file, you MUST:
   - [ ] Respect the SPDX standard,
   - [ ] Use your full name and a valid email address
 
@@ -68,7 +68,7 @@ You can't merge to the "stable" branch without a review done by an "authorized" 
 
 To add new elements or update existing one, you have to create a temporary branch like recommended
 in the Global coding standards:
-[RG8](software/GLOBAL-CODING-STANDARDS.md#rg8---work-in-development-branches).
+[RG8](software/CODING-STANDARDS_global.md#rg8---work-in-development-branches).
 
 #### External contributors
 
@@ -79,7 +79,7 @@ To add new elements or update existing one, you create a fork project to merge t
 
 To add new elements or update existing one, you have to create a temporary branch like recommended
 in the Global coding standards:
-[RG8](software/GLOBAL-CODING-STANDARDS.md#rg8---work-in-development-branches).
+[RG8](software/CODING-STANDARDS_global.md#rg8---work-in-development-branches).
 
 ## Code of Conduct
 
@@ -143,7 +143,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at
- it@allcircuits-technologies.com.
+ it[at]allcircuits-technologies[dot]com.
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the

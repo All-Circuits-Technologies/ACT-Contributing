@@ -95,6 +95,8 @@ application, library, firmware, etc. from this branch.** All bugs found on this 
 logged in an tasks/issues tracker (Redmine, Jira, Issues in GitHub or GitLab, etc.) and analyzed for
 categorization: to be corrected urgently or to be planned for in a future development cycle.
 
+The "stable" branch may be named "master", "main", "stable"... as you wish.
+
 **Adding code to this branch can only be done through peer code review.**
 
 ### RG8 - Work in development branches
@@ -287,7 +289,7 @@ The project's textual files must contain a header, consisting of at least:
 ```
 SPDX-FileCopyrightText:YYYY First name Name <email>
 
-SPDX-License-Identifier:LicenseRef-ALLCircuits-ACT-XZ
+SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-XZ
 ```
 
 This header has to be commented according to the language, i.e. prefixed with `//` for C/C++
@@ -299,7 +301,7 @@ header.
 Example: `icon.png.license`.
 
 In the case of a complex or third-party tree, it is possible to associate a license with a folder
-by creating a file .reuse/dep5as (do not overuse it):
+by creating a .reuse/dep5as file (do not overuse it):
 
 ```
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
@@ -337,4 +339,4 @@ A folder `LICENSES/` must be at the root of your repository, with at least the f
 There must be one file per license used.
 For example there must be an MIT.txt file if the MIT license is used.
 
-This is simplified by using the reuse tool.
+This is simplified by using the reuse tool (`reuse download MIT` for example).

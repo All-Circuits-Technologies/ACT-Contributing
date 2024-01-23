@@ -58,6 +58,6 @@ etc.)
 
 ## List of coding standards
 
-- [Global coding standards](GLOBAL-CODING-STANDARDS.md)
-- [C++ coding standards](CPP-CODING-STANDARDS.md)
-- [Qt coding standards](QT-CODING-STANDARDS.md)
+- [Global coding standards](CODING-STANDARDS_global.md)
+- [C++ coding standards](CODING-STANDARDS_cpp.md)
+- [Qt coding standards](CODING-STANDARDS_qt.md)

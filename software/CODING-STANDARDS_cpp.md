@@ -48,22 +48,23 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
     - [RCPP34 - Default pointer initialization](#rcpp34---default-pointer-initialization)
     - [RCPP35 - Namespace and utility functions](#rcpp35---namespace-and-utility-functions)
     - [RCPP36 - Utility class and functions](#rcpp36---utility-class-and-functions)
+    - [RCPP37 - Use iterators](#rcpp37---use-iterators)
+    - [RCPP38 - Use constant iterators](#rcpp38---use-constant-iterators)
   - [C++11 code standards](#c11-code-standards)
-    - [RCPP11-1 - Use iterators](#rcpp11-1---use-iterators)
-    - [RCPP11-2 - Use constant iterators](#rcpp11-2---use-constant-iterators)
-    - [RCPP11-3 - Virtual method override](#rcpp11-3---virtual-method-override)
-    - [RCPP11-4 - Attributes default initialization](#rcpp11-4---attributes-default-initialization)
-    - [RCPP11-5 - Use nullptr](#rcpp11-5---use-nullptr)
-    - [RCPP11-6 - Default pointer initialization](#rcpp11-6---default-pointer-initialization)
-    - [RCPP11-7 - Constant values](#rcpp11-7---constant-values)
-    - [RCPP11-8 - constexpr, constant values and literal type](#rcpp11-8---constexpr-constant-values-and-literal-type)
-    - [RCPP11-9 - Global constant values](#rcpp11-9---global-constant-values)
+    - [RCPP11-1 - Use constant iterators](#rcpp11-1---use-constant-iterators)
+    - [RCPP11-2 - Virtual method override](#rcpp11-2---virtual-method-override)
+    - [RCPP11-3 - Attributes default initialization](#rcpp11-3---attributes-default-initialization)
+    - [RCPP11-4 - Use nullptr](#rcpp11-4---use-nullptr)
+    - [RCPP11-5 - Default pointer initialization](#rcpp11-5---default-pointer-initialization)
+    - [RCPP11-6 - Constant values](#rcpp11-6---constant-values)
+    - [RCPP11-7 - constexpr, constant values and literal type](#rcpp11-7---constexpr-constant-values-and-literal-type)
+    - [RCPP11-8 - Global constant values](#rcpp11-8---global-constant-values)
 
 ## Introduction
 
-This contains our coding standards for the C++ and Qt projects.
+This contains our coding standards for the C++ projects.
 
-This overload the global standards: [global standards](GLOBAL-CODING-STANDARDS.md)
+This overload the global standards: [global standards](CODING-STANDARDS_global.md)
 
 First read: [coding standards](CODING_STANDARDS.md) to understand how the standards apply on
 projects and the overloading process.
@@ -201,7 +202,7 @@ class MyClass
 {
     public:
         // This can crash at runtime if _coolStuff is nullptr, so it's important
-        // to be sure _coolStuff can't never be null when we call the getter.
+        // to be sure _coolStuff can't be null when we call the getter.
         const ClassA &getCoolStuff() const { return *_coolStuff; }
 
     private:
@@ -233,7 +234,7 @@ The **destructor** must be prefixed with the keyword **"virtual"**.
 > Without the "virtual" keyword applied to the destructor, when deleting from the base class, the
 > destructors of derived classes are not called.
 > For more reading on the subject:
-> https://cpp.developpez.com/faq/cpp/?page=Les-destructeurs#Why-et-quand-faut-il-creer-un-destructeur-virtuel
+> https://cpp.developpez.com/faq/cpp/?page=Les-destructeurs#Why-et-quand-faut-il-creer-un-destructeur-virtuel (fr)
 
 ### RCPP7 - Methods to override are "virtual"
 
@@ -276,7 +277,7 @@ _This is the nominal case, if you do not put the keyword, you must be able to ju
 > the constructor of class A, the compiler will automatically instantiate a class B.
 > In itself, this is not "bad", but it can be a source of error, because it is too permissive.
 > For further reading on the subject:
-> https://www.it-swarm-fr.com/fr/c%2B%2B/que-signifie-le-mot-cle-explicite/958392226/ ; see the
+> https://en.cppreference.com/w/cpp/language/explicit ; see the
 > concept of “Converting constructor”:
 > https://en.cppreference.com/w/cpp/language/converting_constructor
 
@@ -351,7 +352,7 @@ For greater intelligibility but also to better organize the code, the header fil
 constructed as follows and in this order:
 
 1. REUSE header (see
-   [RG22 - SPDX license in headers](GLOBAL-CODING-STANDARDS.md#rg22---spdx-license-in-headers))
+   [RG22 - SPDX license in headers](CODING-STANDARDS_global.md#rg22---spdx-license-in-headers))
 2. `#pragma once` or `#define`
 3. The `#include` of the class we inherit (if we inherit from a class)
 4. All includes to system classes (eg: stdio.h; sorted in alphabetical order)
@@ -389,7 +390,7 @@ For information, and without counter-argument, all groups of elements are separa
 empty line.
 
 ```cpp
-// SPDX-FileCopyrightText: 2019 - 2024 Magnus Carlsen <magnus.carlsen@mail.com>
+// SPDX-FileCopyrightText: 2019 - 2024 Magnus Carlsen <magnus.carlsen@example.com>
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
@@ -546,7 +547,7 @@ For greater intelligibility but also to better organize the code, the source fil
 constructed as follows and in this order:
 
 1. REUSE header (see
-   [RG22 - SPDX license in headers](GLOBAL-CODING-STANDARDS.md#rg22---spdx-license-in-headers))
+   [RG22 - SPDX license in headers](CODING-STANDARDS_global.md#rg22---spdx-license-in-headers))
 2. The `#include` of the header file (with the shortest path, ex: `#include "myclass.hpp"`)
 4. All includes to system classes (eg: stdio.h; sorted in alphabetical order)
 5. All includes to third-party framework classes (e.g. Qt classes; sorted in alphabetical order)
@@ -560,7 +561,7 @@ For information, and without counter-argument, all groups of elements are separa
 empty line.
 
 ```cpp
-// SPDX-FileCopyrightText: 2019 - 2024 Magnus Carlsen <magnus.carlsen@mail.com>
+// SPDX-FileCopyrightText: 2019 - 2024 Magnus Carlsen <magnus.carlsen@example.com>
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
@@ -610,7 +611,7 @@ bool HmiDisplaySimpleTestView::parseDisplayResult(const JsonArray &valuesSet)
 ### RCPP14 - Code documentation
 
 - Severity: **Blocking**
-- Overload: [RG5](GLOBAL-CODING-STANDARDS.md#rg5---documentation-written-in-english)
+- Overload: [RG5](CODING-STANDARDS_global.md#rg5---documentation-written-in-english)
 
 The documentation in code must be written in **English** with doxygen.
 
@@ -1077,9 +1078,7 @@ class CoolStuff
 };
 ```
 
-## C++11 code standards
-
-### RCPP11-1 - Use iterators
+### RCPP37 - Use iterators
 
 - Severity: Non-blocking
 
@@ -1114,6 +1113,19 @@ _Backward iterations:_
 ✅ **good:**
 
 ```cpp
+vector<int> myVector = { 0, 1, 2, 3, 4 };
+
+for(vector<int>::iterator iter = myVector.rbegin(); iter != myVector.rend(); ++iter)
+{
+    // Do something clever
+}
+```
+
+or
+
+```cpp
+vector<int> myVector = { 0, 1, 2, 3, 4 };
+
 vector<int>::iterator iter = myVector.end();
 
 while(iter != myVector.begin())
@@ -1122,6 +1134,7 @@ while(iter != myVector.begin())
     // Do something clever
 }
 ```
+
 
 🟡 **to avoid:**
 
@@ -1134,7 +1147,7 @@ for(int idx = (myVector.length() - 1); idx >= 0 ; --idx)
 }
 ```
 
-### RCPP11-2 - Use constant iterators
+### RCPP38 - Use constant iterators
 
 - Severity: **Blocking**
 
@@ -1155,10 +1168,30 @@ for(vector<int>::const_iterator citer = myVector.begin(); citer != myVector.end(
 > With the C++ default containers, the `begin()` and `end()` methods return either a constant or
 > non-constant iterator. What they return depends on the iterator type, if the iterator type is
 > `const_iterator`, they will return a constant value.
-> This is also true in Qt, but we prefer to use the methods `constBegin()`, `cbegin()` and
-> `constEnd()`, `cend()`, to clearly mark the difference.
 
-### RCPP11-3 - Virtual method override
+## C++11 code standards
+
+### RCPP11-1 - Use constant iterators
+
+- Severity: **Blocking**
+- Overload: [RCPP38](#rcpp38---use-constant-iterators)
+
+Iterators which are not intended to modify containers must be constant.
+
+In C++11 the method `cbegin` and `cend` have been added and has to be used instead of implicit cast.
+
+Example:
+
+```cpp
+vector<int> myVector = { 0, 1, 2, 3, 4 };
+
+for(vector<int>::const_iterator citer = myVector.cbegin(); citer != myVector.cend(); ++citer)
+{
+    // Do something clever
+}
+```
+
+### RCPP11-2 - Virtual method override
 
 - Severity: **Blocking**
 
@@ -1203,7 +1236,7 @@ class DerivedClass : public BaseClass
 > - https://stackoverflow.com/a/54694226
 > - https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-override
 
-### RCPP11-4 - Attributes default initialization
+### RCPP11-3 - Attributes default initialization
 
 - Severity: Non-blocking
 
@@ -1224,7 +1257,7 @@ class MyClass
 };
 ```
 
-### RCPP11-5 - Use nullptr
+### RCPP11-4 - Use nullptr
 
 - Severity: **Blocking**
 
@@ -1243,7 +1276,7 @@ if(myClassPtr == nullptr)
 }
 ```
 
-### RCPP11-6 - Default pointer initialization
+### RCPP11-5 - Default pointer initialization
 
 - Severity: **Blocking**
 - Overload: [RCPP34](#rcpp34---default-pointer-initialization)
@@ -1267,7 +1300,7 @@ OtherClass *otherClass = nullptr;
 OtherClass *anotherClass = new OtherClass();
 ```
 
-### RCPP11-7 - Constant values
+### RCPP11-6 - Constant values
 
 - Severity: **Blocking**
 
@@ -1295,7 +1328,7 @@ class MyClass
 };
 ```
 
-### RCPP11-8 - constexpr, constant values and literal type
+### RCPP11-7 - constexpr, constant values and literal type
 
 - Severity: **Blocking**
 
@@ -1318,7 +1351,7 @@ class MyClass
 > For further reading on the subject:
 > https://docs.microsoft.com/en-us/cpp/cpp/constexpr-cpp?view=msvc-160
 
-### RCPP11-9 - Global constant values
+### RCPP11-8 - Global constant values
 
 - Severity: Non-blocking
 
