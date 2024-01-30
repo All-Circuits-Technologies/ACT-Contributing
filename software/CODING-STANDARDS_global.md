@@ -287,7 +287,7 @@ The files containing codes must be encoded in UTF-8.
 The project's textual files must contain a header, consisting of at least:
 
 ```
-SPDX-FileCopyrightText:YYYY First name Name <email>
+SPDX-FileCopyrightText: YYYY First name Name <email>
 
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-XZ
 ```
@@ -301,7 +301,7 @@ header.
 Example: `icon.png.license`.
 
 In the case of a complex or third-party tree, it is possible to associate a license with a folder
-by creating a .reuse/dep5as file (do not overuse it):
+by creating a .reuse/dep5 file (do not overuse it):
 
 ```
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
