@@ -35,6 +35,8 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
     - [RG21 - Use UTF-8 to encode files](#rg21---use-utf-8-to-encode-files)
     - [RG22 - SPDX license in headers](#rg22---spdx-license-in-headers)
     - [RG23 - LICENSES directory](#rg23---licenses-directory)
+    - [RG24 - No dead code, without a right justification](#rg24---no-dead-code-without-a-right-justification)
+    - [RG25 - TODO and FIXME comment style](#rg25---todo-and-fixme-comment-style)
 
 ## Introduction
 
@@ -333,6 +335,8 @@ Here is the installation procedure:
 
 ### RG23 - LICENSES directory
 
+- Severity: **Blocking**
+
 A folder `LICENSES/` must be at the root of your repository, with at least the file
 `LicenseRef-ALLCircuits-ACT-X.Z.txt` inside.
 
@@ -340,3 +344,57 @@ There must be one file per license used.
 For example there must be an MIT.txt file if the MIT license is used.
 
 This is simplified by using the reuse tool (`reuse download MIT` for example).
+
+### RG24 - No dead code, without a right justification
+
+- Severity: **Blocking**
+
+What we mean by dead code is:
+
+- commented code, and
+- code never called
+
+**You can't have dead code in your projects**, it's the main rule. Because, it adds complexity to
+the reading and may lead developpers to wrongly understand how the features work.
+
+_However, sometimes, we want to keep dead code for right reasons_:
+
+- we have developped classes and methods not used for now but will be used in future,
+- we keep a commented code for examples and explain some things,
+- etc.
+
+In that case, you HAVE TO explain why you want to keep the dead code by adding comments (added
+before the dead code).
+
+The reviewer of your merge request will judge if your choice is relevant or not (or is it misses
+information)
+
+### RG25 - TODO and FIXME comment style
+
+- Severity: Non-blocking
+
+Sometimes, we want to add TODO and FIXME comments in our code; because we want to express the fact
+that some elements have to be done in future or has to be fixed.
+
+For adding the TODO and FIXME comments, you follow the Flutter linter rule:
+[flutter_style_todos](https://dart.dev/tools/linter-rules/flutter_style_todos)
+
+> Use Flutter TODO format: // TODO(username): message, https://URL-to-issue.
+>
+> [...]
+>
+> From the
+> [Flutter docs](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#comments):
+>
+> > TODOs should include the string TODO in all caps, followed by the [...] username of the person
+> > with the best context about the problem referenced by the TODO in parenthesis. A TODO is not a
+> > commitment that the person referenced will fix the problem, it is intended to be the person with
+> > enough context to explain the problem. Thus, when you create a TODO, it is almost always your
+> > username that is given.
+>
+> **GOOD:**
+>
+> ```
+> // TODO(username): message.
+> // TODO(username): message, https://URL-to-issue.
+> ```
