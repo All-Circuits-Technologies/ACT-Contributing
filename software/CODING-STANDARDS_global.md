@@ -36,7 +36,7 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
   - [RG23 - LICENSES directory](#rg23---licenses-directory)
   - [RG24 - No dead code, without a right justification](#rg24---no-dead-code-without-a-right-justification)
   - [RG25 - TODO and FIXME comment style](#rg25---todo-and-fixme-comment-style)
-  - [RG26 - The code in stable branches (especially master or main)](#rg26---the-code-in-stable-branches-especially-master-or-main)
+  - [RG26 - The code in stable branches (especially master or main) has to be peer reviewed](#rg26---the-code-in-stable-branches-especially-master-or-main-has-to-be-peer-reviewed)
   - [RG27 - Your project has to be built and lint with CI tools](#rg27---your-project-has-to-be-built-and-lint-with-ci-tools)
   - [RG28 - Your project deliverable must be produced by CI/CD tools](#rg28---your-project-deliverable-must-be-produced-by-cicd-tools)
   - [RG29 - Each projects must have a README.md with a quick presentation and start guide](#rg29---each-projects-must-have-a-readmemd-with-a-quick-presentation-and-start-guide)
@@ -456,7 +456,7 @@ For adding the TODO and FIXME comments, you follow the Flutter linter rule:
 > // TODO(username): message, https://URL-to-issue.
 > ```
 
-### RG26 - The code in stable branches (especially master or main)
+### RG26 - The code in stable branches (especially master or main) has to be peer reviewed
 
 | Project type | Severity     |
 | ------------ | ------------ |
