@@ -4,17 +4,16 @@ SPDX-FileCopyrightText: 2024 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 -->
 
-# Coding standards
+# Coding standards <!-- omit from toc -->
 
 ## Table of contents
 
-- [Coding standards](#coding-standards)
-  - [Table of contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Glossary](#glossary)
-  - [Standards overload](#standards-overload)
-  - [Standards ids](#standards-ids)
-  - [List of coding standards](#list-of-coding-standards)
+- [Table of contents](#table-of-contents)
+- [Introduction](#introduction)
+- [Glossary](#glossary)
+- [Standards overload](#standards-overload)
+- [Standards ids](#standards-ids)
+- [List of coding standards](#list-of-coding-standards)
 
 ## Introduction
 
@@ -22,7 +21,16 @@ This readme contains the list of coding standards to use with our Git repositori
 
 ## Glossary
 
-Severity of facts when doing a code review
+We distinguish different types of project. Depending on the the project type, the severity on rules
+may be different. The project types are:
+
+| ID      | Description                                                                                             |
+| ------- | ------------------------------------------------------------------------------------------------------- |
+| Default | This is the default projects, which can be with client or internal to the company.                      |
+| PoC     | This is Proof Of Concept projects, the goal of those projects are only to test or proove some concepts. |
+| *All*   | All the projects.                                                                                       |
+
+Severity when doing a code review:
 
 | ID           | Description                                                                                                      |
 | ------------ | ---------------------------------------------------------------------------------------------------------------- |
