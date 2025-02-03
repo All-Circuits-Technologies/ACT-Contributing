@@ -4,20 +4,19 @@ SPDX-FileCopyrightText: 2024 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 -->
 
-# Qt Coding standards
+# Qt Coding standards <!-- omit from toc -->
 
 ## Table of contents
 
-- [Qt Coding standards](#qt-coding-standards)
-  - [Table of contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Qt specific code standards - with standard C++](#qt-specific-code-standards---with-standard-c)
-    - [RQT1 - Inherits from QObject](#rqt1---inherits-from-qobject)
-    - [RQT2 - QObject and inheritance](#rqt2---qobject-and-inheritance)
-    - [RQT3 - Macro Q\_OBJECT](#rqt3---macro-q_object)
-  - [Qt specific code standards - with C++11](#qt-specific-code-standards---with-c11)
-    - [RQTCPP11-1 - Signals and slots](#rqtcpp11-1---signals-and-slots)
-    - [RQTCPP11-2 - Signals and slots, excluding library](#rqtcpp11-2---signals-and-slots-excluding-library)
+- [Table of contents](#table-of-contents)
+- [Introduction](#introduction)
+- [Qt specific code standards - with standard C++](#qt-specific-code-standards---with-standard-c)
+  - [RQT1 - Inherits from QObject](#rqt1---inherits-from-qobject)
+  - [RQT2 - QObject and inheritance](#rqt2---qobject-and-inheritance)
+  - [RQT3 - Macro Q\_OBJECT](#rqt3---macro-q_object)
+- [Qt specific code standards - with C++11](#qt-specific-code-standards---with-c11)
+  - [RQTCPP11-1 - Signals and slots](#rqtcpp11-1---signals-and-slots)
+  - [RQTCPP11-2 - Signals and slots, excluding library](#rqtcpp11-2---signals-and-slots-excluding-library)
 
 ## Introduction
 
