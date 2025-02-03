@@ -36,7 +36,7 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
   - [RG23 - LICENSES directory](#rg23---licenses-directory)
   - [RG24 - No dead code, without a right justification](#rg24---no-dead-code-without-a-right-justification)
   - [RG25 - TODO and FIXME comment style](#rg25---todo-and-fixme-comment-style)
-  - [RG26 - The code in "stable" branch has to be peer reviewed](#rg26---the-code-in-stable-branch-has-to-be-peer-reviewed)
+  - [RG26 - The code in stable branches (especially master or main)](#rg26---the-code-in-stable-branches-especially-master-or-main)
   - [RG27 - Your project has to be built and lint with CI tools](#rg27---your-project-has-to-be-built-and-lint-with-ci-tools)
   - [RG28 - Your project deliverable must be produced by CI/CD tools](#rg28---your-project-deliverable-must-be-produced-by-cicd-tools)
   - [RG29 - Each projects must have a README.md with a quick presentation and start guide](#rg29---each-projects-must-have-a-readmemd-with-a-quick-presentation-and-start-guide)
@@ -456,14 +456,15 @@ For adding the TODO and FIXME comments, you follow the Flutter linter rule:
 > // TODO(username): message, https://URL-to-issue.
 > ```
 
-### RG26 - The code in "stable" branch has to be peer reviewed
+### RG26 - The code in stable branches (especially master or main)
 
 | Project type | Severity     |
 | ------------ | ------------ |
 | Default      | **Blocking** |
 | PoC          | Non-blocking |
 
-Adding code to the "stable" branch can only be done through peer code review.
+Adding code to the "stable" branches (such as `master`, `stable` or `main`) can only be done through
+peer code review.
 
 ### RG27 - Your project has to be built and lint with CI tools
 
@@ -473,11 +474,6 @@ Adding code to the "stable" branch can only be done through peer code review.
 
 The code of your project has to be linted and built with Continuous Integration tools. Such as
 Jenkins, GitLab CI, Github Actions, etc.
-
-Le but de cette règle est de vérifier que le code compile bien sur un autre PC que celui du
-développeur (les développeurs installent tout un tas d'outils qui peuvent faire tomber en marche un
-logiciel), mais aussi que le code respect bien les règles établies et qui peuvent être vérifiées
-automatiquement.
 
 The purpose of this rule is to check that the code builds on a PC other than the developer one
 (developers install a whole bunch of tools that can make the software accidentally works), but also
