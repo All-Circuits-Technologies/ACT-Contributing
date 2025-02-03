@@ -39,6 +39,7 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
   - [RG26 - The code in "stable" branch has to be peer reviewed](#rg26---the-code-in-stable-branch-has-to-be-peer-reviewed)
   - [RG27 - Your project has to be built and lint with CI tools](#rg27---your-project-has-to-be-built-and-lint-with-ci-tools)
   - [RG28 - Your project deliverable must be produced by CI/CD tools](#rg28---your-project-deliverable-must-be-produced-by-cicd-tools)
+  - [RG29 - Each projects must have a README.md with a quick presentation and start guide](#rg29---each-projects-must-have-a-readmemd-with-a-quick-presentation-and-start-guide)
 
 ## Introduction
 
@@ -496,3 +497,16 @@ do not control the environment compilation. You are therefore not sure that you 
 reproduce the same result each time you build.
 Likewise, if you are not present and a colleague has to make a delivery, or your PC breaks down, it
 complicates everything.
+
+### RG29 - Each projects must have a README.md with a quick presentation and start guide
+
+| Project type | Severity     |
+| ------------ | ------------ |
+| *All*        | **Blocking** |
+
+All the projects must have a `README.md` at the root of its repositories. The `README.md` has to
+contain a quick presentation of the project and a quick start to explain how to:
+
+- install the dev environment,
+- build/make the library, applications, etc.,
+- deploy the applications, etc.
