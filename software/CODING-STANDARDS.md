@@ -11,7 +11,7 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 - [Table of contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Glossary](#glossary)
-- [Standards overload](#standards-overload)
+- [Standards override](#standards-override)
 - [Standards ids](#standards-ids)
 - [List of coding standards](#list-of-coding-standards)
 
@@ -37,10 +37,10 @@ Severity when doing a code review:
 | Blocking     | Rule which blocks the review validation                                                                          |
 | Non-blocking | Better to have it, and may be corrected in the long term but not blocking the validation of the review by itself |
 
-## Standards overload
+## Standards override
 
-**Global standards can be overloaded by language-specific standards, which themselves can be
-overloaded by project standards:**
+**Global standards can be overriden by language-specific standards, which themselves can be
+overriden by project standards:**
 
 `Project standards > Language standards > Global standards`
 
