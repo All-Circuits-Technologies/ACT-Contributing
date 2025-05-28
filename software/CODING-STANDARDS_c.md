@@ -291,14 +291,9 @@ Using "table" or "&table[ 0 ]" then becomes a matter of style, generally:
 table.
 - Using "table + X" is preferred when we talk about sub-table from element X.
 
-### RC -
-
-- Severity: **Blocking**
-
-### RC - Enumeration values
+### RC14 - Enumeration values
 
 - Severity: **Blocking**
 
 All enumeration values **MUST** contain last value with `eNBR` suffix.
 This value is used to know the number of elements in the enumeration.
-
