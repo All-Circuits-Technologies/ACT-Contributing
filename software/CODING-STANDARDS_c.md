@@ -174,7 +174,8 @@ or
 /* TODO XXX mon message */
 ```
 
-Where XXX is the trigram of the person who will do the TODO.
+Where XXX is the initial with last name of the person who will do the TODO.
+Example: tmagne
 
 ### RC7 - One file per class or fonctionnality
 
@@ -185,8 +186,8 @@ of the class or functionality. Name of file must be in lowercase.
 Example: RGB led driver is in file `rgb_led.c`, `rgb_led.h` and rgb_led_types.h.
 
 [!Note]
-xxx_types.h files are used to define types that may used by c file that not
-have directly access to rgb_led.h.
+xxx_types.h files can be used to define types that may be used by c file which
+do not have a direct access to rgb_led.h.
 
 ### RC8 - Naming conventions
 
@@ -256,7 +257,7 @@ typedef enum
 
 - Severity: **Blocking**
 
-The maximum number of characters per line is **80**. there can be an exception
+The maximum number of characters per line is **80**. There can be an exception
 for comments.
 
 ### RC11 - Indentation
@@ -270,13 +271,26 @@ For C code indentation, tabs are not allowed. The indentation is done with
 
 - Severity: **Blocking**
 
-Structures **MUST** be initialized with fields in the same order as they are
-declared. Using the field order is forbidden.
+Structures **MUST** be initialized with fields' name.
+Using the fields order during initialisation is forbidden.
 
 ```c
+/* GOOD */
 prefix_my_struct_t my_struct = {
     .id = 0,
     .is_active = true
+};
+
+/* GOOD */
+prefix_my_struct_t my_struct = {
+    .is_active = true,
+    .id = 0
+};
+
+/* BAD */
+prefix_my_struct_t my_struct = {
+    0,
+    true
 };
 ```
 
@@ -293,7 +307,28 @@ table.
 
 ### RC14 - Enumeration values
 
-- Severity: **Blocking**
+- Severity: Not blocking
 
 All enumeration values **MUST** contain last value with `eNBR` suffix.
 This value is used to know the number of elements in the enumeration.
+
+### RC15 - Macro global parentheses
+
+- Severity: **Blocking**
+
+All macros **MUST** be defined with parentheses around the whole macro
+definition.
+
+```c
+#define prefixMY_MACRO (8 + 3)
+```
+
+### RC16 - Macro arguments parentheses
+
+- Severity: **Blocking**
+
+All macros **MUST** be defined with parentheses around the arguments.
+
+```c
+#define prefixMY_MACRO(x) ((x) * (x))
+```
