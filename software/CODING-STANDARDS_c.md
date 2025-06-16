@@ -194,7 +194,8 @@ do not have a direct access to rgb_led.h.
 - Severity: **Blocking**
 
 All names of functions, variables, structures, enumerations, and macros **MUST**
-be prefixed with a unique prefix that identifies the project or module.
+be prefixed with a unique prefix of 3-6 characters **without** _ that
+identifies the project or module.
 
 To limit the risk of name collisions, the prefix should be unique to the project.
 The prefix should be in lowercase and separated by two underscore `__`.
