@@ -198,11 +198,8 @@ be prefixed with a unique prefix of 3-6 characters **without** _ that
 identifies the project or module.
 
 To limit the risk of name collisions, the prefix should be unique to the project.
-The prefix should be in lowercase and separated by two underscore `__`.
+The prefix should be in lowercase and separated by one underscore `_`.
 But macros prefix in lowercase joined by name of the macro in uppercase.
-
-Prefixes should shorter as possible, 3 to 5 characters is a good length.
-Like accronym of the module.
 
 Example in `pwm.c`:
 
@@ -211,25 +208,25 @@ Example in `pwm.c`:
 typedef enum
 {
     /** @brief Value for VAR0 */
-    pwm__enum_eVAR0 = 0,
+    pwm_enum_eVAR0 = 0,
     /** @brief Value for VAR1 */
-    pwm__enum_eVAR1,
-    pwm__enum_eNBR
-} pwm__enum_t;
+    pwm_enum_eVAR1,
+    pwm_enum_eNBR
+} pwm_enum_t;
 
 /* Define constant */
 #define pwmCONST (0)
 
 /* Define variable */
-PRIVATE uint8_t pwm__var;
+PRIVATE uint8_t pwm_var;
 
 /* Define functions */
-PUBLIC void pwm__init(void)
+PUBLIC void pwm_init(void)
 {
     ...
 }
 
-PUBLIC void pwm__set_var(uint8_t test_var)
+PUBLIC void pwm_set_var(uint8_t test_var)
 {
     ...
 }
@@ -243,7 +240,7 @@ Open braces `{` must be on their own line but closing braces `}` should be on
 the same line as declaration of the structure, enumeration, or function.
 
 ```c
-PUBLIC void prefix__function(void)
+PUBLIC void prefix_function(void)
 {
     ...
 }
@@ -251,7 +248,7 @@ PUBLIC void prefix__function(void)
 typedef enum
 {
     ...
-} prefix__my_enum_t;
+} prefix_my_enum_t;
 ```
 
 ### RC10 - Maximum number of characters per line
