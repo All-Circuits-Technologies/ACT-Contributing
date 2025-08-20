@@ -1,5 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2024 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+SPDX-FileCopyrightText: 2025 Pierre-Noel Bouteville <pierre-noel.bouteville@allcircuits.com>
 
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 -->
@@ -16,7 +17,7 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
 This contains our coding standards for the C projects.
 
-This overload the global standards: [global standards](CODING-STANDARDS_global.md)
+This overrides the global standards: [global standards](CODING-STANDARDS_global.md)
 
 First read: [coding standards](CODING_STANDARDS.md) to understand how the standards apply on
 projects and the overloading process.
@@ -46,11 +47,11 @@ The tags used are as follows (and in the following order):
 
 Example:
 
-```cpp
+```c
 /**
  * @brief Brief description of what the function does
  * @note A note on the function which precises an important element
- * @note A second note about an other important element
+ * @note A second note about another important element
  * @warning A warning about the limit of the function, this is useful when it can't 
  *          be tested in the function itself
  * @see struct_a_t // This is a direct reference to a method or struct
@@ -76,7 +77,7 @@ The tags used are as follows (and in the following order):
  * @brief Brief description of what the structure does
  * @note A note on the structure which precises an important element
  * @note A second note about an other important element
- * @warning A warning about the limit of the class
+ * @warning A warning about the limit of the structure
  */
 typedef struct 
 {
