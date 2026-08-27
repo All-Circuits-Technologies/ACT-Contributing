@@ -67,5 +67,6 @@ etc.)
 ## List of coding standards
 
 - [Global coding standards](CODING-STANDARDS_global.md)
+- [C coding standards](CODING-STANDARDS_c.md)
 - [C++ coding standards](CODING-STANDARDS_cpp.md)
 - [Qt coding standards](CODING-STANDARDS_qt.md)
