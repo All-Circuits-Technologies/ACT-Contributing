@@ -1,5 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2024 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+SPDX-FileCopyrightText: 2025 Pierre-Noel Bouteville <pierre-noel.bouteville@allcircuits.com>
 
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 -->
@@ -10,7 +11,7 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
 - [Table of contents](#table-of-contents)
 - [Introduction](#introduction)
-- [C++ code standards](#c-code-standards)
+- [C code standards](#c-code-standards)
 
 ## Introduction
 
@@ -18,7 +19,7 @@ This contains our coding standards for the C projects.
 
 This overload the global standards: [global standards](CODING-STANDARDS_global.md)
 
-First read: [coding standards](CODING_STANDARDS.md) to understand how the standards apply on
+First read: [coding standards](CODING-STANDARDS.md) to understand how the standards apply on
 projects and the overloading process.
 
 ## C code standards
@@ -36,30 +37,69 @@ Example:
 
 - Severity: **Blocking**
 
-Functions **MUST** be documented and at the beginning of their implementation
-except for API functions which are documented in the header file.
+Functions **MUST** be documented with doxygen above their definition in the
+`.c` file. The header file only carries the bare prototype.
 
 This documentation contains a brief description of what the function does,
 what it returns, and its arguments.
 
 The tags used are as follows (and in the following order):
 
-Example:
+Example in `pwm.c`:
 
-```cpp
+```c
 /**
  * @brief Brief description of what the function does
  * @note A note on the function which precises an important element
  * @note A second note about an other important element
- * @warning A warning about the limit of the function, this is useful when it can't 
- *          be tested in the function itself
+ * @warning A warning about the limit of the function, this is useful when it
+ *          can't be tested in the function itself
  * @see struct_a_t // This is a direct reference to a method or struct
- * @param[in] pwd What is the meaning of the param, how it is used 
- * @param[in] sloop What is the meaning of the param, how it is used 
- * @return What the function returns and what is the meaning of the value returned 
+ * @param[in] pwd What is the meaning of the param, how it is used
+ * @param[in] sloop What is the meaning of the param, how it is used
+ * @return What the function returns and what is the meaning of the value
+ *         returned
  */
-int prefix_my_function(struct_a_t pwd, int sloop);
+PUBLIC int pwm_my_function(struct_a_t pwd, int sloop)
+{
+    ...
+}
 ```
+
+The only exception is a header file implemented by **several** `.c` files (one
+per port or backend, chosen at build time). The documentation is then the
+contract shared by every implementation, so it **MUST** be written in the `.h`,
+above the prototype. Each `.c` only carries, above the function definition, a
+plain comment which points back to the header holding the doxygen.
+
+Example in `include/sdcard.h`:
+
+```c
+/**
+ * @brief Mount the SD card
+ * @return 0 if the SD card has been mounted, a negative error code otherwise
+ */
+PUBLIC int sdcard_mount(void);
+```
+
+Example in `src/sdcard_spi.c`:
+
+```c
+/*
+ * see ../include/sdcard.h
+ */
+PUBLIC int sdcard_mount(void)
+{
+    ...
+}
+```
+
+The goal of this rule is to keep exactly **one** copy of the documentation:
+with one implementation, the `.c` is that place; with several, duplicating the
+same `@brief` in each backend guarantees they drift apart.
+
+A comment which is specific to one implementation still belongs to its own
+`.c`, as a plain comment: it is not part of the contract.
 
 ### RC3 - Structures documentation
 
