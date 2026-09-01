@@ -1,5 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2024 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+SPDX-FileCopyrightText: 2026 Pierre-Noel Bouteville <pierre-noel.bouteville@allcircuits.com>
 
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 -->
@@ -40,6 +41,7 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
   - [RG27 - Your project has to be built and lint with CI tools](#rg27---your-project-has-to-be-built-and-lint-with-ci-tools)
   - [RG28 - Your project deliverable must be produced by CI/CD tools](#rg28---your-project-deliverable-must-be-produced-by-cicd-tools)
   - [RG29 - Each projects must have a README.md with a quick presentation and start guide](#rg29---each-projects-must-have-a-readmemd-with-a-quick-presentation-and-start-guide)
+  - [RG30 - Declare the code formatter version in the file header](#rg30---declare-the-code-formatter-version-in-the-file-header)
 
 ## Introduction
 
@@ -506,3 +508,71 @@ contain a quick presentation of the project and a quick start to explain how to:
 - install the dev environment,
 - build/make the library, applications, etc.,
 - deploy the applications, etc.
+
+### RG30 - Declare the code formatter version in the file header
+
+| Project type | Severity     | Applicability                                   |
+| ------------ | ------------ | ----------------------------------------------- |
+| Default      | **Blocking** | If the code is formatted with an auto-formatter |
+| PoC          | Non-blocking |                                                 |
+
+Auto-formatters such as `clang-format` change their output from one major version to the next, and
+the version installed on a workstation is usually the one shipped by the current distribution
+(Debian, etc.), which changes every two years. A project does not always follow: it may be a legacy
+project, or a project which cannot afford to reformat its whole tree right now. Such a project is
+then reformatted differently by each developer, which pollutes the diffs and hides the real changes.
+
+Therefore, **each source file must declare, in its header, the major version of the formatter its
+layout complies with.**
+
+The declaration:
+
+- is **mandatory** in every source file written in a language the project formatter handles,
+- is placed in the file header, right after the SPDX block (see RG22),
+- is commented according to the language (see RG22),
+- uses the exact tag `clang-format-version: <major>`, one tag per formatter used,
+- gives the **major** version only: `19`, not `19.1.7`.
+
+Example for a C or C++ file:
+
+```c
+// SPDX-FileCopyrightText: 2026 Jane Doe <jane.doe@allcircuits.com>
+//
+// SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+//
+// clang-format-version: 19
+```
+
+How to use it:
+
+- the file must be formatted with the declared version, and only with it. A developer whose
+  distribution ships another version has to install the declared one — on Debian the packages are
+  versioned, so several versions can live side by side (`clang-format-19`),
+- when a file is migrated to a newer version, the tag is updated **in the same commit** as the
+  reformatting, and that commit contains nothing else, so the reformatting noise stays reviewable,
+- the files which must never be formatted (generated code, third-party trees) are excluded at
+  project level, in the formatter and CI configuration. There is no per-file way to opt out.
+
+The CI (see RG27) checks two things, and **fails** if either is false:
+
+- every source file carries the tag — a missing tag is an error, not a default,
+- reformatting the file with the declared version changes nothing, which
+  `clang-format-<major> --dry-run --Werror` reports directly.
+
+> [!NOTE]
+> The formatter configuration is shared by a whole source tree (`.clang-format` applies to a
+> directory and its children) whereas the tag is per file. During a migration, several versions
+> coexist in the same tree, so the configuration must stay readable by the **oldest** version
+> declared in it: do not use the options introduced by the newest one until the migration is over.
+> Each configuration file should also state, in a comment on its first lines, the version it is
+> written for.
+<!-- Empty line to separate the two notes -->
+> [!NOTE]
+> A project which mixes C and C++ has one configuration file per language, at the root of each
+> source tree, because the two styles differ. The tag works the same way in both trees, and lets a
+> C tree and a C++ tree be migrated independently.
+<!-- Empty line to separate the two notes -->
+> [!NOTE]
+> Since the tag is mandatory, applying this rule to an existing project is a single mechanical
+> commit which adds it to every file with the version currently in use. Do that commit alone, before
+> any reformatting, so that the later version migrations stay small and reviewable.
