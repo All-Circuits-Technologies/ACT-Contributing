@@ -404,3 +404,47 @@ failed, so the day one caller needs the reason, the signature and every call
 site change; an `int` has that room from the start. Conversely a question has
 no failure to report, and reading `-1` as the answer to it is a bug waiting to
 happen.
+
+### RC18 - Include organisation
+
+- Severity: **Blocking**
+
+The includes of a `.c` file are all written between the two `def_soft`
+markers, inside a `clang-format off` fence, and split by what they are for:
+
+- after `extern.h`, **everything the file consumes**, ordered from the most
+  generic to the most specific: the C library, then the vendor and SoC
+  headers, then the project ones - `arch`, then the board, then the
+  components, then the application. Alphabetical inside one group,
+- after `intern.h`, **only the header that declares this very file**.
+
+```c
+/* clang-format off */
+#include "act_def_soft/extern.h"
+#   include <stddef.h>
+#   include "stm32g4xx.h"
+#   include "arch/clock.h"
+
+#include "act_def_soft/intern.h"
+#   include "arch/tick.h"
+/* clang-format on */
+```
+
+The split is what gives the markers their meaning: after `extern.h` a
+`PUBLIC` prototype reads `extern`, so a consumed header only declares; after
+`intern.h` it reads as nothing, so the header being implemented defines, and a
+definition that does not match its declaration is a compile error rather than
+a link surprise. An include left below the fence is read on the *implementing*
+side, which is the wrong side for a header this file merely consumes, and it
+hides from the reader which of the two roles it plays.
+
+A header file carries no marker, since both sides include it. Its own
+includes stay in one block, in the same order: generic first, specific last.
+
+Two notes on the tools. `clang-format` sorts includes alphabetically, and it
+sees `extern.h` and `intern.h` as two includes like any other: left alone, it
+mixes the markers with the headers they qualify and a header ends up on the
+wrong side of the split. That is what the `clang-format off` fence prevents.
+`clang-tidy`'s `llvm-include-order` asks for the opposite order - quoted
+headers before system ones - so a project following this rule turns that
+check off.
