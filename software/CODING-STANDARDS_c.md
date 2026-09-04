@@ -370,3 +370,102 @@ All macros **MUST** be defined with parentheses around the arguments.
 ```c
 #define prefixMY_MACRO(x) ((x) * (x))
 ```
+
+### RC17 - Function name and return type
+
+- Severity: **Blocking**
+
+A function that answers a yes or no question **MUST** return `bool`, and its
+name **MUST** read as that question: `prefix_is_<state>`. When the module
+answers for several subjects, the subject comes first:
+`prefix_<subject>_is_<state>`.
+
+A function that performs an action which can fail **MUST NOT** return `bool`.
+It keeps the name of the action it performs and returns an `int`:
+
+- zero on success, or a positive value when the call also produces one,
+- a negative value on failure: `-1` when there is nothing more to say, or a
+  negative error code when the caller has to tell the failures apart.
+
+```c
+/* A question: bool, and the name asks it. */
+PUBLIC bool pwm_is_running(void);
+PUBLIC bool pwm_channel_is_enabled(uint8_t channel);
+
+/* An action that can fail: int, and the name says what it does. */
+PUBLIC int pwm_start(uint32_t freq_hz);
+
+/* An action that produces a value: the value, or a negative error. */
+PUBLIC int pwm_duty_get(void);
+```
+
+The call site tests that same contract, so it tests the **sign**: a failure is
+`< 0`, a success is `>= 0`, never `== 0`. A function that returns zero today
+may return a count tomorrow, which this rule allows, and a call site written
+`== 0` then reads that success as a failure - with no warning from the
+compiler.
+
+```c
+const int result = pwm_duty_get();
+
+if (result >= 0) /* not "== 0" */
+{
+    ...
+}
+```
+
+Testing the sign can cost one instruction more than testing the equality: on
+Thumb-2, `== 0` compiles to a single `cbz`, while `>= 0` needs a `cmp` and a
+`bge`. That is two bytes for a call site that survives its callee gaining a
+return value, and nothing at all as soon as the compiler can see the values
+that callee returns.
+
+The two are not interchangeable. A `bool` says nothing about *why* an action
+failed, so the day one caller needs the reason, the signature and every call
+site change; an `int` has that room from the start. Conversely a question has
+no failure to report, and reading `-1` as the answer to it is a bug waiting to
+happen.
+
+### RC18 - Include organisation
+
+- Severity: **Blocking**
+
+The includes of a `.c` file are all written between the two `def_soft`
+markers, inside a `clang-format off` fence, and split by what they are for:
+
+- after `extern.h`, **everything the file consumes**, ordered from the most
+  generic to the most specific: the C library, then the vendor and SoC
+  headers, then the project ones - `arch`, then the board, then the
+  components, then the application. Alphabetical inside one group,
+- after `intern.h`, **only the header that declares this very file**.
+
+```c
+/* clang-format off */
+#include "act_def_soft/extern.h"
+#   include <stddef.h>
+#   include "stm32g4xx.h"
+#   include "arch/clock.h"
+
+#include "act_def_soft/intern.h"
+#   include "arch/tick.h"
+/* clang-format on */
+```
+
+The split is what gives the markers their meaning: after `extern.h` a
+`PUBLIC` prototype reads `extern`, so a consumed header only declares; after
+`intern.h` it reads as nothing, so the header being implemented defines, and a
+definition that does not match its declaration is a compile error rather than
+a link surprise. An include left below the fence is read on the *implementing*
+side, which is the wrong side for a header this file merely consumes, and it
+hides from the reader which of the two roles it plays.
+
+A header file carries no marker, since both sides include it. Its own
+includes stay in one block, in the same order: generic first, specific last.
+
+Two notes on the tools. `clang-format` sorts includes alphabetically, and it
+sees `extern.h` and `intern.h` as two includes like any other: left alone, it
+mixes the markers with the headers they qualify and a header ends up on the
+wrong side of the split. That is what the `clang-format off` fence prevents.
+`clang-tidy`'s `llvm-include-order` asks for the opposite order - quoted
+headers before system ones - so a project following this rule turns that
+check off.
