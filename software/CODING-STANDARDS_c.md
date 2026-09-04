@@ -399,6 +399,27 @@ PUBLIC int pwm_start(uint32_t freq_hz);
 PUBLIC int pwm_duty_get(void);
 ```
 
+The call site tests that same contract, so it tests the **sign**: a failure is
+`< 0`, a success is `>= 0`, never `== 0`. A function that returns zero today
+may return a count tomorrow, which this rule allows, and a call site written
+`== 0` then reads that success as a failure - with no warning from the
+compiler.
+
+```c
+const int result = pwm_duty_get();
+
+if (result >= 0) /* not "== 0" */
+{
+    ...
+}
+```
+
+Testing the sign can cost one instruction more than testing the equality: on
+Thumb-2, `== 0` compiles to a single `cbz`, while `>= 0` needs a `cmp` and a
+`bge`. That is two bytes for a call site that survives its callee gaining a
+return value, and nothing at all as soon as the compiler can see the values
+that callee returns.
+
 The two are not interchangeable. A `bool` says nothing about *why* an action
 failed, so the day one caller needs the reason, the signature and every call
 site change; an `int` has that room from the start. Conversely a question has
