@@ -370,3 +370,37 @@ All macros **MUST** be defined with parentheses around the arguments.
 ```c
 #define prefixMY_MACRO(x) ((x) * (x))
 ```
+
+### RC17 - Function name and return type
+
+- Severity: **Blocking**
+
+A function that answers a yes or no question **MUST** return `bool`, and its
+name **MUST** read as that question: `prefix_is_<state>`. When the module
+answers for several subjects, the subject comes first:
+`prefix_<subject>_is_<state>`.
+
+A function that performs an action which can fail **MUST NOT** return `bool`.
+It keeps the name of the action it performs and returns an `int`:
+
+- zero on success, or a positive value when the call also produces one,
+- a negative value on failure: `-1` when there is nothing more to say, or a
+  negative error code when the caller has to tell the failures apart.
+
+```c
+/* A question: bool, and the name asks it. */
+PUBLIC bool pwm_is_running(void);
+PUBLIC bool pwm_channel_is_enabled(uint8_t channel);
+
+/* An action that can fail: int, and the name says what it does. */
+PUBLIC int pwm_start(uint32_t freq_hz);
+
+/* An action that produces a value: the value, or a negative error. */
+PUBLIC int pwm_duty_get(void);
+```
+
+The two are not interchangeable. A `bool` says nothing about *why* an action
+failed, so the day one caller needs the reason, the signature and every call
+site change; an `int` has that room from the start. Conversely a question has
+no failure to report, and reading `-1` as the answer to it is a bug waiting to
+happen.
