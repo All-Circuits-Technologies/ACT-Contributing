@@ -1,0 +1,65 @@
+# SPDX-FileCopyrightText: 2026 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+#
+# SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+
+# Dev container service for the ACT-Contributing documentation repository.
+#
+# Two mount modes, selected entirely by an OPTIONAL .devcontainer/.env file:
+#
+#   * Simple (default, no .env): the repository clone is mounted at
+#     /workspaces/act-contributing and nothing else from the host is exposed.
+#     Use this if you don't need git worktrees.
+#
+#   * Worktree (opt-in via .env): the PROJECT ROOT one level above the clone is
+#     mounted at /workspaces, so the clone (/workspaces/act-contributing) and its
+#     sibling worktrees (/workspaces/<branch>) are all visible inside the
+#     container. This lets several agents work on different branches in parallel.
+#     See .env.example and README.md.
+#
+# In BOTH modes the clone ends up at /workspaces/act-contributing, which is why
+# devcontainer.json can keep a single static workspaceFolder.
+#
+# This is a docs-only repo: unlike a code dev container there is no privileged
+# mode, host networking or X11 forwarding here - none of it is needed to lint
+# Markdown or run REUSE.
+
+services:
+  dev:
+    build:
+      # Context is .devcontainer (this file's directory).
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USERNAME: debian
+    # Forward the gh token into the container as a real env var. The value comes
+    # from the auto-loaded .devcontainer/.env (see .env.example). Optional: if
+    # unset it resolves to empty and gh just falls back to `gh auth login`.
+    # Claude needs nothing here - it's an in-container `claude` sign-in.
+    environment:
+      GH_TOKEN: ${GH_TOKEN:-}
+    volumes:
+      # Workspace mount. Defaults to simple mode: clone -> /workspaces/act-contributing.
+      # Worktree users set both vars in .devcontainer/.env (see .env.example):
+      #   WORKSPACE_MOUNT_SOURCE=../..   # the project root, one level above the clone
+      #   WORKSPACE_MOUNT_TARGET=/workspaces
+      # Relative sources resolve against this file's directory (.devcontainer):
+      # `..` is the clone, `../..` is the project root that also contains the
+      # sibling worktrees.
+      #
+      # The simple-mode default target below MUST equal workspaceFolder in
+      # devcontainer.json (a mount target inherently has to). That file is the
+      # single source of truth; this is the one value kept in sync with it by hand.
+      - ${WORKSPACE_MOUNT_SOURCE:-..}:${WORKSPACE_MOUNT_TARGET:-/workspaces/act-contributing}:cached
+      # Claude Code config (login, sessions, transcripts, plugin index;
+      # CLAUDE_CONFIG_DIR points here) in an ISOLATED named volume, NOT a host
+      # bind mount: Claude's plugin index stores absolute in-container paths that
+      # a shared host ~/.claude would leak across containers. The Dockerfile
+      # pre-creates ~/.claude so this volume initialises with user ownership.
+      - act-contributing-claude-config:/home/debian/.claude
+    # The image's CMD is just bash; keep the service alive so VS Code can attach.
+    command: sleep infinity
+
+volumes:
+  # Isolated per-container Claude Code config. Persists across rebuilds, shared
+  # with nothing.
+  act-contributing-claude-config:
