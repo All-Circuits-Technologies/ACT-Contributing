@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+#
+# SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+
+# Per-user, optional environment file (tokens, worktree mode). See .env.example.
+.env

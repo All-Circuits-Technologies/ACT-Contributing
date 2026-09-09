@@ -209,7 +209,9 @@ Format of the TODO comment:
 ```c
 /* TODO (XXX): mon message */
 ```
+
 or
+
 ```c
 /* TODO XXX mon message */
 ```
