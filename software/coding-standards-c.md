@@ -5,28 +5,37 @@ SPDX-FileCopyrightText: 2025 Pierre-Noel Bouteville <pierre-noel.bouteville@allc
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 -->
 
-# Coding standards <!-- omit from toc -->
+# C coding standards
+
+Coding standards for C projects. This standard overloads the
+[global standards](coding-standards-global.md); first read the
+[coding standards index](coding-standards.md) for how the standards combine and the override
+mechanism. Like every ACT standard, it covers only what a linter cannot enforce (see
+[what belongs here](coding-standards.md#what-belongs-here)).
 
 ## Table of contents
 
-- [Table of contents](#table-of-contents)
-- [Introduction](#introduction)
 - [C code standards](#c-code-standards)
-
-## Introduction
-
-This contains our coding standards for the C projects.
-
-This overload the global standards: [global standards](CODING-STANDARDS_global.md)
-
-First read: [coding standards](CODING-STANDARDS.md) to understand how the standards apply on
-projects and the overloading process.
+  - [RC1 - Documentation](#rc1---documentation)
+  - [RC2 - Function documentation](#rc2---function-documentation)
+  - [RC3 - Structures documentation](#rc3---structures-documentation)
+  - [RC4 - Documentation of enums](#rc4---documentation-of-enums)
+  - [RC5 - Organisation of header files](#rc5---organisation-of-header-files)
+  - [RC6 - TODO](#rc6---todo)
+  - [RC7 - One file per class or fonctionnality](#rc7---one-file-per-class-or-fonctionnality)
+  - [RC8 - Naming conventions](#rc8---naming-conventions)
+  - [RC9 - Braces](#rc9---braces)
+  - [RC10 - Maximum number of characters per line](#rc10---maximum-number-of-characters-per-line)
+  - [RC11 - Indentation](#rc11---indentation)
+  - [RC12 - Initialisation of structures](#rc12---initialisation-of-structures)
+  - [RC13 - Table pointer usage](#rc13---table-pointer-usage)
+  - [RC14 - Enumeration values](#rc14---enumeration-values)
+  - [RC15 - Macro global parentheses](#rc15---macro-global-parentheses)
+  - [RC16 - Macro arguments parentheses](#rc16---macro-arguments-parentheses)
 
 ## C code standards
 
 ### RC1 - Documentation
-
-- Severity: **Blocking**
 
 Blocking Code documentation is written in English with doxygen.
 See: [Génération de la documentation du code écrit](https://extranet.allcircuits-technologies.com/projects/engineering/wiki/G%C3%A9n%C3%A9ration_de_la_documentation_du_code_%C3%A9crit)
@@ -34,8 +43,6 @@ See: [Génération de la documentation du code écrit](https://extranet.allcircu
 Example:
 
 ### RC2 - Function documentation
-
-- Severity: **Blocking**
 
 Functions **MUST** be documented with doxygen above their definition in the
 `.c` file. The header file only carries the bare prototype.
@@ -103,8 +110,6 @@ A comment which is specific to one implementation still belongs to its own
 
 ### RC3 - Structures documentation
 
-- Severity: **Blocking**
-
 Structures **MUST** be documented and at the beginning of their declarations.
 This documentation contains a brief description of what the structure represents
 and what it is used for.
@@ -147,8 +152,6 @@ typedef struct
 ```
 
 ### RC4 - Documentation of enums
-
-- Severity: **Blocking**
 
 Enumerations **MUST** be documented and at the beginning of their declarations.
 This documentation contains a brief description of what the enumeration represents
@@ -194,15 +197,11 @@ typedef enum
 
 ### RC5 - Organisation of header files
 
-- Severity: Not blocking
-
 For clarity and consistency, the header files must be organized in a specific
 way. And respect skeleton file found at root of the project. For new projects,
 see [actprojectskeletons](http://gitlab.act.lan:8011/internal-libraries/actprojectskeletons.git)
 
 ### RC6 - TODO
-
-- Severity: **Blocking**
 
 Format of the TODO comment:
 
@@ -221,8 +220,6 @@ Example: tmagne
 
 ### RC7 - One file per class or fonctionnality
 
-- Severity: **Blocking**
-
 One file must contain only one class or one functionality and name with the name
 of the class or functionality. Name of file must be in lowercase.
 Example: RGB led driver is in file `rgb_led.c`, `rgb_led.h` and rgb_led_types.h.
@@ -232,8 +229,6 @@ xxx_types.h files can be used to define types that may be used by c file which
 do not have a direct access to rgb_led.h.
 
 ### RC8 - Naming conventions
-
-- Severity: **Blocking**
 
 All names of functions, variables, structures, enumerations, and macros **MUST**
 be prefixed with a unique prefix of 3-6 characters **without** _ that
@@ -276,8 +271,6 @@ PUBLIC void pwm_set_var(uint8_t test_var)
 
 ### RC9 - Braces
 
-- Severity: Not blocking
-
 Open braces `{` must be on their own line but closing braces `}` should be on
 the same line as declaration of the structure, enumeration, or function.
 
@@ -295,21 +288,15 @@ typedef enum
 
 ### RC10 - Maximum number of characters per line
 
-- Severity: **Blocking**
-
 The maximum number of characters per line is **80**. There can be an exception
 for comments.
 
 ### RC11 - Indentation
 
-- Severity: **Blocking**
-
 For C code indentation, tabs are not allowed. The indentation is done with
 **4 spaces**.
 
 ### RC12 - Initialisation of structures
-
-- Severity: **Blocking**
 
 Structures **MUST** be initialized with fields' name.
 Using the fields order during initialisation is forbidden.
@@ -336,8 +323,6 @@ prefix_my_struct_t my_struct = {
 
 ### RC13 - Table pointer usage
 
-- Severity: **Blocking**
-
 Using "table" or "&table[ 0 ]" then becomes a matter of style, generally:
 
 - Using "table" is preferred when we talk about the whole table.
@@ -347,14 +332,10 @@ table.
 
 ### RC14 - Enumeration values
 
-- Severity: Not blocking
-
 All enumeration values **MUST** contain last value with `eNBR` suffix.
 This value is used to know the number of elements in the enumeration.
 
 ### RC15 - Macro global parentheses
-
-- Severity: **Blocking**
 
 All macros **MUST** be defined with parentheses around the whole macro
 definition.
@@ -364,8 +345,6 @@ definition.
 ```
 
 ### RC16 - Macro arguments parentheses
-
-- Severity: **Blocking**
 
 All macros **MUST** be defined with parentheses around the arguments.
 

@@ -4,12 +4,16 @@ SPDX-FileCopyrightText: 2024 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 -->
 
-# Coding standards <!-- omit from toc -->
+# C++ coding standards
+
+Coding standards for C++ projects. This standard overloads the
+[global standards](coding-standards-global.md); first read the
+[coding standards index](coding-standards.md) for how the standards combine and the override
+mechanism. Like every ACT standard, it covers only what a linter cannot enforce (see
+[what belongs here](coding-standards.md#what-belongs-here)).
 
 ## Table of contents
 
-- [Table of contents](#table-of-contents)
-- [Introduction](#introduction)
 - [C++ code standards](#c-code-standards)
   - [RCPP1 - Instance attributes of a private class](#rcpp1---instance-attributes-of-a-private-class)
   - [RCPP2 - Attribute accessors](#rcpp2---attribute-accessors)
@@ -59,20 +63,9 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
   - [RCPP11-7 - constexpr, constant values and literal type](#rcpp11-7---constexpr-constant-values-and-literal-type)
   - [RCPP11-8 - Global constant values](#rcpp11-8---global-constant-values)
 
-## Introduction
-
-This contains our coding standards for the C++ projects.
-
-This overload the global standards: [global standards](CODING-STANDARDS_global.md)
-
-First read: [coding standards](CODING_STANDARDS.md) to understand how the standards apply on
-projects and the overloading process.
-
 ## C++ code standards
 
 ### RCPP1 - Instance attributes of a private class
-
-- Severity: **Blocking**
 
 The class's instance attributes must be **always** private. (_They cannot be public or protected_)
 
@@ -91,8 +84,6 @@ class MyClass
 > use accessors.
 
 ### RCPP2 - Attribute accessors
-
-- Severity: Non-blocking
 
 The attributes of a class may have:
 
@@ -124,8 +115,6 @@ class MyClass
 
 ### RCPP3 - Simple accessors in headers
 
-- Severity: Non-blocking
-
 If the setters, getters and accessors only contain a return or a simple assignment, their
 implementations should be written in the header (to be seen as `inline`).
 
@@ -156,8 +145,6 @@ class MyClass
 ```
 
 ### RCPP4 - Use reference
-
-- Severity: **Blocking**
 
 **Objects must be passed**, wherever possible, **by reference**.
 
@@ -216,16 +203,12 @@ class MyClass
 
 ### RCPP5 - Objects destroying
 
-- Severity: **Blocking**
-
 The **destruction of objects instantiated** with the "new" operator **must be handled in the code**.
 
 C++ does not have a garbage collector, so it is very important to avoid memory leaks to ensure
 that the destruction of all created objects is managed.
 
 ### RCPP6 - The destructor is "virtual"
-
-- Severity: **Blocking**
 
 The **destructor** must be prefixed with the keyword **"virtual"**.
 
@@ -237,8 +220,6 @@ The **destructor** must be prefixed with the keyword **"virtual"**.
 > (fr)
 
 ### RCPP7 - Methods to override are "virtual"
-
-- Severity: **Blocking**
 
 All **methods** of a base class that can be **overridden** in derived classes **must be "virtual"**.
 
@@ -264,8 +245,6 @@ class DerivedClass : public BaseClass
 
 ### RCPP8 - The constructor is "explicit"
 
-- Severity: Non-blocking
-
 By default, **constructors** should be prefixed with the keyword **"explicit"**.
 
 _This is the nominal case, if you do not put the keyword, you must be able to justify why._
@@ -283,8 +262,6 @@ _This is the nominal case, if you do not put the keyword, you must be able to ju
 
 ### RCPP9 - Constant method
 
-- Severity: Non-blocking
-
 Methods which don't modify members of a class should be constant.
 
 Example:
@@ -301,8 +278,6 @@ class MyClass
 ```
 
 ### RCPP10 - Include in headers
-
-- Severity: Non-blocking
 
 To avoid to include unnecessarily code in cascade, **it is important to only add in the headers the
 `#include` actually used in the headers themselves**.
@@ -340,19 +315,15 @@ class MyClass
 
 ### RCPP11 - The `#pragma once`
 
-- Severity: Non-blocking
-
 If the compiler allows it, **prefer to use `#pragma once` instead of `#define`** in headers.
 
 ### RCPP12 - Syntactic organization of header files
-
-- Severity: Non-blocking
 
 For greater intelligibility but also to better organize the code, the header files must be
 constructed as follows and in this order:
 
 1. REUSE header (see
-   [RG22 - SPDX license in headers](CODING-STANDARDS_global.md#rg22---spdx-license-in-headers))
+   [RG22 - Carry SPDX licensing on every file](coding-standards-global.md#rg22---carry-spdx-licensing-on-every-file))
 2. `#pragma once` or `#define`
 3. The `#include` of the class we inherit (if we inherit from a class)
 4. All includes to system classes (eg: stdio.h; sorted in alphabetical order)
@@ -541,13 +512,11 @@ class HmiDisplaySimpleTestView : public HmiDisplayHelper
 
 ### RCPP13 - Syntactic organization of source files
 
-- Severity: Non-blocking
-
 For greater intelligibility but also to better organize the code, the source files must be
 constructed as follows and in this order:
 
 1. REUSE header (see
-   [RG22 - SPDX license in headers](CODING-STANDARDS_global.md#rg22---spdx-license-in-headers))
+   [RG22 - Carry SPDX licensing on every file](coding-standards-global.md#rg22---carry-spdx-licensing-on-every-file))
 2. The `#include` of the header file (with the shortest path, ex: `#include "myclass.hpp"`)
 3. All includes to system classes (eg: stdio.h; sorted in alphabetical order)
 4. All includes to third-party framework classes (e.g. Qt classes; sorted in alphabetical order)
@@ -610,8 +579,7 @@ bool HmiDisplaySimpleTestView::parseDisplayResult(const JsonArray &valuesSet)
 
 ### RCPP14 - Code documentation
 
-- Severity: **Blocking**
-- Overload: [RG5](CODING-STANDARDS_global.md#rg5---documentation-written-in-english)
+- Overload: [RG5](coding-standards-global.md#rg5---write-code-documentation-in-english)
 
 The documentation in code must be written in **English** with doxygen.
 
@@ -625,8 +593,6 @@ class ClassA
 ```
 
 ### RCPP15 - Code documentation of functions/methods
-
-- Severity: **Blocking**
 
 The functions/methods must be documented and included in the header files, above their declarations.
 The documentation must contain a brief description of what the function/method does, what it
@@ -652,8 +618,6 @@ multiple tags.
 
 ### RCPP16 - Code documentation of classes
 
-- Severity: **Blocking**
-
 The classes must be documented and included in the header files, above their declarations. The
 documentation must contain a brief description of what the class represents and what it is used for.
 This is where we explain the algorithms linked to the class and what it achieves. But also the links
@@ -676,8 +640,6 @@ The tags `@note` and `@warning` should only cover one topic/subject at a time. I
 multiple tags.
 
 ### RCPP17 - Code documentation of structures
-
-- Severity: **Blocking**
 
 The structures must be documented and included in the header files, above their declarations. The
 documentation must contain a brief description of what the structure represents and what it is used
@@ -723,8 +685,6 @@ struct MyStruct
 
 ### RCPP18 - Code documentation of enumeration
 
-- Severity: **Blocking**
-
 The enumerations must be documented and included in the header files, above their declarations. The
 documentation must contain a brief description of what the enum represents and what it is used
 for.
@@ -769,8 +729,6 @@ enum MyEnum
 
 ### RCCP19 - Classes and namespaces naming
 
-- Severity: **Blocking**
-
 **Class and namespace names** must respect **UpperCamelCase**.
 
 Example:
@@ -787,8 +745,6 @@ class MyClass
 
 ### RCCP20 - Local variables naming
 
-- Severity: **Blocking**
-
 The **name of local variables** must respect the **lowerCamelCase**.
 
 Example:
@@ -798,8 +754,6 @@ int myVar;
 ```
 
 ### RCCP21 - Class methods naming
-
-- Severity: **Blocking**
 
 The **method name** must respect the **lowerCamelCase**.
 
@@ -815,8 +769,6 @@ class MyClass
 
 ### RCCP22 - Class member naming
 
-- Severity: **Blocking**
-
 A **class member name** must respect the **lowerCamelCase** and begins with an underscore.
 
 Example:
@@ -831,8 +783,6 @@ class MyClass
 
 ### RCPP23 - Method parameters naming
 
-- Severity: **Blocking**
-
 The **name of method parameters** must respect the **lowerCamelCase**.
 
 Example:
@@ -845,8 +795,6 @@ void MyClass::myMethod(bool myParam1, int myParam2)
 ```
 
 ### RCPP24 - Enumeration naming
-
-- Severity: **Blocking**
 
 The **name of the enumeration and its members** must respect the **UpperCamelCase**.
 
@@ -861,8 +809,6 @@ enum AnimalType
 ```
 
 ### RCPP25 - Structure naming
-
-- Severity: **Blocking**
 
 The **name of the structure** must respect the **UpperCamelCase**.
 
@@ -879,8 +825,6 @@ struct MyStruct
 
 ### RCPP26 - Static methods naming
 
-- Severity: **Blocking**
-
 The **name of the static methods** must respect the **lowerCamelCase**.
 
 Example:
@@ -894,8 +838,6 @@ class MyClass
 ```
 
 ### RCPP27 - Constant static class members naming
-
-- Severity: **Blocking**
 
 The **name of constant static class members** must respect the **UpperCamelCase**.
 
@@ -911,8 +853,6 @@ class MyClass
 
 ### RCPP28 - File naming
 
-- Severity: **Blocking**
-
 Each **file** must be **named according to the class, namespace, enum or struct it contains**.
 
 The **file name is written in lowercase**, **does not contain spaces, hyphens or underscores**.
@@ -923,8 +863,6 @@ Example:
 > contain the class must be: `mybeautifulclass.hpp` and `mybeautifulclass.cpp`.
 
 ### RCPP29 - Macro naming
-
-- Severity: **Blocking**
 
 The **macro name** must respect the **SCREAMING_SNAKE_CASE**.
 
@@ -939,8 +877,6 @@ class MyClass
 ```
 
 ### RCPP30 - Add units in names
-
-- Severity: **Blocking**
 
 When a **constant**, a **variable**, a **method refers** in their names to something quantifiable,
 the **unit must be specified in the name**.
@@ -962,8 +898,6 @@ int distanceInKm = 2;
 ```
 
 ### RCPP31 - One brace equals one line
-
-- Severity: **Blocking**
 
 A brace must be alone on its own line.
 
@@ -991,15 +925,11 @@ if(test)
 
 ### RCPP32 - One file per class, namespace, enum or structure
 
-- Severity: **Blocking**
-
 Each **class or namespace** must have its **own file**.
 
 If **an enum or a structure** is **not contained in a class**, it must **have its own file**.
 
 ### RCPP33 - Use the latest revision of C++
-
-- Severity: Non-blocking
 
 _On new projects and if the compiler allows it_, you should use the latest compatible C++ revision.
 
@@ -1007,8 +937,6 @@ The C++ revisions add new features but also make certain mechanics simpler. But 
 version of your compiler, it may not support all revisions of C++, and sometimes only in part.
 
 ### RCPP34 - Default pointer initialization
-
-- Severity: **Blocking**
 
 **All pointers** that **do not point to a created instance must be initialized with 0** (or MACRO,
 like NULL).
@@ -1021,8 +949,6 @@ OtherClass *anotherClass = new OtherClass();
 ```
 
 ### RCPP35 - Namespace and utility functions
-
-- Severity: **Blocking**
 
 Functions that can be grouped by theme must be grouped in namespaces.
 
@@ -1039,8 +965,6 @@ namespace Utilities
 ```
 
 ### RCPP36 - Utility class and functions
-
-- Severity: **Blocking**
 
 _If grouping **utility functions** cannot be done in a namespace_, because some functions has to be
 private, then they must be grouped in a class as a static methods.
@@ -1079,8 +1003,6 @@ class CoolStuff
 ```
 
 ### RCPP37 - Use iterators
-
-- Severity: Non-blocking
 
 To iterate over a list, map, etc. your should use iterators instead of indexes.
 
@@ -1148,8 +1070,6 @@ for(int idx = (myVector.length() - 1); idx >= 0 ; --idx)
 
 ### RCPP38 - Use constant iterators
 
-- Severity: **Blocking**
-
 Iterators which are not intended to modify containers must be constant.
 
 Example:
@@ -1172,7 +1092,6 @@ for(vector<int>::const_iterator citer = myVector.begin(); citer != myVector.end(
 
 ### RCPP11-1 - Use constant iterators
 
-- Severity: **Blocking**
 - Overload: [RCPP38](#rcpp38---use-constant-iterators)
 
 Iterators which are not intended to modify containers must be constant.
@@ -1191,8 +1110,6 @@ for(vector<int>::const_iterator citer = myVector.cbegin(); citer != myVector.cen
 ```
 
 ### RCPP11-2 - Virtual method override
-
-- Severity: **Blocking**
 
 All derived class methods that override virtual methods must have an `override` suffix.
 
@@ -1238,8 +1155,6 @@ class DerivedClass : public BaseClass
 
 ### RCPP11-3 - Attributes default initialization
 
-- Severity: Non-blocking
-
 When **attributes** have **default values** _​​(true for all constructors)_, these values **​​must be
 put in the header rather than in the constructors**.
 
@@ -1259,8 +1174,6 @@ class MyClass
 
 ### RCPP11-4 - Use nullptr
 
-- Severity: **Blocking**
-
 The keyword: `nullptr`, must always be used to nullify a pointer or test its nullity.
 
 From C++11, it's better to user `nullptr` instead of `0`, or macro returning `0` like `NULL`.
@@ -1278,7 +1191,6 @@ if(myClassPtr == nullptr)
 
 ### RCPP11-5 - Default pointer initialization
 
-- Severity: **Blocking**
 - Overload: [RCPP34](#rcpp34---default-pointer-initialization)
 
 **All pointers** that **do not point to a created instance must be initialized with `nullptr`**.
@@ -1301,8 +1213,6 @@ OtherClass *anotherClass = new OtherClass();
 ```
 
 ### RCPP11-6 - Constant values
-
-- Severity: **Blocking**
 
 Constant values must be defined by `static const` rather than macros (`#define`).
 
@@ -1330,8 +1240,6 @@ class MyClass
 
 ### RCPP11-7 - constexpr, constant values and literal type
 
-- Severity: **Blocking**
-
 All constant values ​​that are "Literal types" must be "`constexpr`".
 
 Example:
@@ -1352,8 +1260,6 @@ class MyClass
 > https://docs.microsoft.com/en-us/cpp/cpp/constexpr-cpp?view=msvc-160
 
 ### RCPP11-8 - Global constant values
-
-- Severity: Non-blocking
 
 All global constant values ​​of a project should be stored in dedicated header files and specific
 namespaces.
