@@ -55,6 +55,7 @@ prefix tells you which standard a rule belongs to:
 | `RC`                  | C                |
 | `RCPP`                | C++              |
 | `RQT`, `RQTCPP11`     | Qt               |
+| `RD`, `RFL`           | Dart and Flutter |
 
 An id is a stable public API: other repositories cite it in code review and link to it. A rule's
 wording may change, but its id never moves to a different rule and is never reused.
@@ -65,3 +66,4 @@ wording may change, but its id never moves to a different rule and is never reus
 - [C coding standards](coding-standards-c.md)
 - [C++ coding standards](coding-standards-cpp.md)
 - [Qt coding standards](coding-standards-qt.md)
+- [Flutter coding standards](coding-standards-flutter.md)

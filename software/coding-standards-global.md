@@ -11,7 +11,7 @@ Language-agnostic rules that apply to every ACT software repository. Each rule h
 public API: their wording may change, but a code (`RG8`) never moves to a different rule and is
 never reused.
 
-These global rules are the base layer. A language standard (C, C++, Qt) or a project
+These global rules are the base layer. A language standard (C, C++, Qt, Flutter) or a project
 standard may tighten a value; the most specific one wins: `project > language > global`. See
 [coding-standards.md](coding-standards.md) for the override mechanism.
 
