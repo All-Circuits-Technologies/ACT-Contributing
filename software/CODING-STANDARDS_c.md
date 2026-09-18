@@ -469,3 +469,78 @@ wrong side of the split. That is what the `clang-format off` fence prevents.
 `clang-tidy`'s `llvm-include-order` asks for the opposite order - quoted
 headers before system ones - so a project following this rule turns that
 check off.
+
+### RC19 - Unhandled error
+
+- Severity: **Blocking**
+
+This is how [RG30](CODING-STANDARDS_global.md) is applied in C.
+
+A project **MUST** provide one single dead end for every error it does not
+handle:
+
+```c
+PUBLIC void lle_unhandled(uint32_t code);
+```
+
+A failed assertion, an interrupt vector that was never wired, a `default:`
+case that cannot happen, a return code no caller knows how to recover from:
+all of them **MUST** end there, and the assertion macro **MUST** call it when
+its condition is false. `code` identifies the site that gave up, and every
+site **MUST** have its own value.
+
+Nothing else is allowed to be a dead end: no empty `for (;;)`, no silent
+return, and no waiting for a watchdog. A watchdog is often not implemented,
+and even when it is, it resets the product long after the evidence is gone.
+
+`lle_unhandled()` **MUST**, in this order:
+
+1. **disable the interrupts**, so that nothing keeps running behind the
+   failure and undoes what follows,
+2. **put the product in a safe state**, through the project function that owns
+   it: heating, motors, valves, high voltage, anything that can hurt someone
+   or damage the product is cut as far as the hardware allows,
+3. **call the soft breakpoint macro** `archBKP()`, **in debug builds only**,
+   so that a developer stops on the failure itself with the stack still
+   intact,
+4. **emit a pattern** on a LED or a GPIO that says an unhandled case was
+   reached, and that cannot be confused with any normal indication,
+5. **carry `code` in that pattern**, coded so that a human can read it back by
+   eye, with no probe attached, and name the site that failed,
+6. **reset the product**.
+
+```c
+PUBLIC void lle_unhandled(uint32_t code)
+{
+    archIRQ_DISABLE();
+
+    prj_safe_state();
+
+#ifdef DEBUG
+    archBKP();
+#endif
+
+    lle_pattern(code);
+
+    archRESET();
+}
+```
+
+The order is the rule. The interrupts go first because a timer or a DMA that
+keeps firing can drive a motor again just after the safe state was reached.
+The safe state comes before anything that talks to a human or to a debugger,
+because that part can take seconds and the product must already be harmless
+while it runs.
+
+The breakpoint is compiled in debug builds only, for two reasons. On the
+bench, with a probe attached, it is the whole point: the core halts on the
+faulty instruction and the stack still says how it got there. In the field it
+would be harmful, since the instruction takes a fault of its own when no
+debugger is listening, and a product stopped there is a product that never
+reaches its reset.
+
+The pattern is the only channel left on a product with no console and no
+probe, so it has to be designed to be read: distinct from every normal
+indication, slow enough for the eye, and repeated until the reset. That is
+also why `code` is a parameter rather than a message string - a number can be
+blinked, a string cannot.

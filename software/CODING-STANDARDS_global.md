@@ -40,6 +40,7 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
   - [RG27 - Your project has to be built and lint with CI tools](#rg27---your-project-has-to-be-built-and-lint-with-ci-tools)
   - [RG28 - Your project deliverable must be produced by CI/CD tools](#rg28---your-project-deliverable-must-be-produced-by-cicd-tools)
   - [RG29 - Each projects must have a README.md with a quick presentation and start guide](#rg29---each-projects-must-have-a-readmemd-with-a-quick-presentation-and-start-guide)
+  - [RG30 - Unhandled error](#rg30---unhandled-error)
 
 ## Introduction
 
@@ -506,3 +507,35 @@ contain a quick presentation of the project and a quick start to explain how to:
 - install the dev environment,
 - build/make the library, applications, etc.,
 - deploy the applications, etc.
+
+### RG30 - Unhandled error
+
+| Project type | Severity     |
+| ------------ | ------------ |
+| *All*        | **Blocking** |
+
+When a program reaches a state it does not know how to handle, it **MUST** stop the activity that
+led there, make the failure visible and recordable, and preserve what is needed to diagnose it. It
+**MUST NOT** carry on in a state it can no longer describe, and it **MUST NOT** rely on an outside
+mechanism to notice the failure for it.
+
+An error is handled when the code knows which state it is in afterwards. Catching a failure to turn
+it into a documented error and passing it up is handling it. The following are not, and are
+forbidden:
+
+- a catch-all that does nothing, or that only logs and lets execution continue from the state that
+  raised: `catch (...) { }`, `catch (e) { }`, and their equivalent in every language,
+- an error return value, status or code that no caller reads,
+- an asynchronous failure nobody is attached to: a `Future` or a `Promise` with no error handler, a
+  stream subscribed without `onError`,
+- an empty wait loop or a silent return standing in for the failure handling,
+- a retry that hides a permanent failure,
+- counting on a watchdog, a supervisor, an orchestrator or an automatic restart to detect the
+  failure. Such a mechanism is often not deployed, and when it does act, the state that would have
+  explained the failure is already gone.
+
+What "visible and recordable" means depends on what the product is, and the language standards say
+with which mechanism. On a desktop application or a service, it is a log entry carrying the context
+and the call stack, and a controlled termination of the operation. On a microcontroller with no
+console, it is the dead end described by the C standards - safe state, identifying pattern, reset -
+see [RC19](CODING-STANDARDS_c.md).
