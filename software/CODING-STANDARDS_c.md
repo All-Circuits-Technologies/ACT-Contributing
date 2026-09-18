@@ -469,3 +469,29 @@ wrong side of the split. That is what the `clang-format off` fence prevents.
 `clang-tidy`'s `llvm-include-order` asks for the opposite order - quoted
 headers before system ones - so a project following this rule turns that
 check off.
+
+### RC19 - Format macros for fixed-width integers
+
+- Severity: **Blocking**
+
+A fixed-width integer type from `<stdint.h>` (`uint32_t`, `int16_t`, ...)
+passed to a `printf`/`scanf` family function **MUST** use the conversion macro
+from `<inttypes.h>` (`PRIu32`, `PRId16`, `PRIx32`, `SCNu32`, ...), never a
+hard-coded conversion specifier (`%u`, `%lu`, `%d`, ...).
+
+```c
+/* GOOD */
+uint32_t count = ...;
+printf("count = %" PRIu32 "\n", count);
+
+/* BAD */
+uint32_t count = ...;
+printf("count = %u\n", count);   /* or "%lu" */
+```
+
+The underlying type of a fixed-width type is not the same on every platform:
+`uint32_t` is `unsigned int` on one target and `unsigned long` on another. A
+hard-coded specifier is therefore correct on at most one of them; on the other
+it mismatches the argument, which is undefined behaviour and breaks
+`-Wformat`. The macro expands to the specifier that matches the type on the
+platform being built, so the same code stays correct everywhere.
