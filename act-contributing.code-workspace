@@ -9,13 +9,8 @@
 	],
 	"settings": {
 		"editor.formatOnSave": true
-	},
-	"extensions": {
-		"recommendations": [
-			"yzhang.markdown-all-in-one",
-			"bierner.markdown-mermaid",
-			"davidanson.vscode-markdownlint",
-			"redhat.vscode-yaml"
-		]
 	}
+	// Recommended extensions are NOT listed here: they live in
+	// .devcontainer/devcontainer.json (customizations.vscode.extensions), the
+	// single source of truth, so the two never drift out of sync.
 }

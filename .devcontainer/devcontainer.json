@@ -4,45 +4,29 @@
 {
   "name": "ACT-Contributing Docs Environment",
   // Docker Compose based (see docker-compose.yml). The `dev` service carries the
-  // workspace mount and lets an optional .devcontainer/.env switch on git-worktree
-  // mounts without touching this file. See README.md.
+  // workspace mount and the tool config volumes. See README.md.
   "dockerComposeFile": "docker-compose.yml",
   "service": "dev",
-  // SINGLE SOURCE OF TRUTH for the in-container workspace path. The clone is
-  // ALWAYS here, whether docker-compose mounted just the clone (simple, default)
-  // or the whole project root (worktree mode), so nothing downstream needs to
-  // know which mode is active. The ONE value kept in sync by hand is the
-  // simple-mode default mount target in docker-compose.yml (a mount target
-  // inherently has to equal workspaceFolder); both files cross-reference each other.
+  // SINGLE SOURCE OF TRUTH for the in-container workspace path: the clone is
+  // mounted here, and worktrees live inside it under ./worktrees/. The ONE value
+  // kept in sync by hand is the mount target in docker-compose.yml (a mount
+  // target inherently has to equal workspaceFolder); both files cross-reference
+  // each other.
   "workspaceFolder": "/workspaces/act-contributing",
-  "features": {
-    // A recent git (>= 2.48, needed for worktree.useRelativePaths - see
-    // postCreateCommand) is built from source in the Dockerfile and installed to
-    // /usr/local. This feature is kept at "os-provided" only so gh/git tooling
-    // that expects the feature present still resolves; the Dockerfile's
-    // /usr/local/bin/git takes precedence on PATH.
-    "ghcr.io/devcontainers/features/git:1": {
-      "version": "os-provided"
-    },
-    // GitHub CLI (gh) - used alongside Claude Code for PR/issue workflows. Auth
-    // reuses the host's ~/.ssh mount and GH_TOKEN forwarded from .devcontainer/.env.
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    // Node.js (LTS) - required by the Claude Code CLI feature below and by
-    // markdownlint-cli2 (installed in postCreateCommand). The base image ships none.
-    // Listed before claude-code so Node is present when it installs.
-    "ghcr.io/devcontainers/features/node:1": {},
-    // Installs the Claude Code CLI. Auth is interactive: run `claude` once and
-    // sign in through the wizard. Credentials and config live in an isolated named
-    // volume (CLAUDE_CONFIG_DIR below), so the login persists across rebuilds.
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
-  },
+  // No devcontainer features: every tool (a recent git built from source, reuse,
+  // gh, Node.js and markdownlint-cli2) is installed directly in the Dockerfile,
+  // which keeps versions explicit and reproducible in one place. Features are
+  // deliberately avoided - they have proven more trouble than help. Claude Code
+  // is the one exception, installed by postCreateCommand below (see its comment).
   "mounts": [
     // Mount .ssh from the host so git operations that require authentication work
-    // inside the container.
+    // inside the container (the GitHub remote is git@github.com:...).
     "source=${localEnv:HOME}/.ssh,target=/home/debian/.ssh,type=bind,consistency=cached"
-    // ~/.claude is an isolated named volume (act-contributing-claude-config),
-    // declared and mounted in docker-compose.yml - not a host bind mount, to avoid
-    // leaking absolute in-container plugin paths across containers. See README.md.
+    // ~/.claude and ~/.config/gh are isolated named volumes
+    // (act-contributing-claude-config / -gh-config), declared and mounted in
+    // docker-compose.yml - not host bind mounts, so each container keeps its own
+    // logins and Claude's absolute in-container plugin paths never leak across
+    // containers. See README.md.
   ],
   "customizations": {
     "vscode": {
@@ -57,31 +41,41 @@
         "mhutchie.git-graph",
         "donjayamanne.githistory",
         "eamodio.gitlens",
+        "redhat.vscode-yaml",
         "github.vscode-github-actions",
         "ms-azuretools.vscode-containers"
       ]
     }
   },
-  // Runs from the workspaceFolder, so paths are relative and mode-agnostic.
-  // - Relative git worktree paths, so `git worktree add` works regardless of where
-  //   the project root is mounted (only honoured by git >= 2.48). Written to the
-  //   SYSTEM config (/etc/gitconfig) on purpose: VS Code's
+  // Runs from the workspaceFolder, so paths are relative.
+  // - Relative git worktree paths, so a worktree created under ./worktrees/
+  //   resolves both from the container (/workspaces/act-contributing) and from
+  //   the host, whose clone path differs (only honoured by git >= 2.48).
+  //   Written to the SYSTEM config (/usr/local/etc/gitconfig, since git is built
+  //   with prefix=/usr/local - see the Dockerfile) on purpose: VS Code's
   //   `dev.containers.copyGitConfig` copies the host ~/.gitconfig into the
   //   container ONLY when ~/.gitconfig does not yet exist. A `git config --global`
   //   here would create ~/.gitconfig first and silently suppress that copy,
   //   leaving the container with no user.name / user.email. Writing --system keeps
   //   ~/.gitconfig absent so the host identity still comes through.
-  // - markdownlint-cli2, the CLI behind the Markdown Lint CI, so docs can be
-  //   linted locally with the same tool before pushing.
+  // - The Claude Code CLI, via the official installer, which fetches a
+  //   self-contained native binary (no Node.js runtime). Installed here rather
+  //   than in the Dockerfile so the ~250MB binary and every version the CLI
+  //   self-updates to live in the container's writable layer, where the CLI's own
+  //   cleanup can reclaim them, instead of being pinned in an image layer forever.
+  //   It runs as remoteUser because everything goes under $HOME (the launcher in
+  //   ~/.local/bin, on PATH, and the binaries in ~/.local/share/claude/) and the
+  //   installer refuses to run under sudo. `latest` selects the latest release
+  //   channel. Authentication is interactive: run `claude` once and sign in; the
+  //   login lands in the ~/.claude volume and survives rebuilds. See README.md.
+  //   (markdownlint-cli2 is NOT here - it is baked into the Dockerfile.)
   "postCreateCommand": {
     "git worktree relative paths": "sudo git config --system worktree.useRelativePaths true",
-    "install markdownlint-cli2": "sudo npm install -g markdownlint-cli2"
+    "claude code": "curl -fsSL https://claude.ai/install.sh | bash -s latest"
   },
   // Use 'debian' as the default user inside the container
   "remoteUser": "debian",
   "containerEnv": {
-    // The Claude binary is owned by the devcontainer feature; don't let it self-update.
-    "DISABLE_AUTOUPDATER": "1",
     // Point Claude's entire config (the ~/.claude data dir AND ~/.claude.json,
     // which holds the login, onboarding and trusted-folder state) at the isolated
     // named volume mounted here. This is what makes a single interactive `claude`
