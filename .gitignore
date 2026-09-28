@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2026 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+#
+# SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+
+# Git worktrees
+#
+# Home for `git worktree add worktrees/<name>` checkouts. Ignored so worktrees
+# can live inside the clone (the only path bind-mounted into the dev container)
+# without ever showing up as untracked content. See worktrees/README.md.
+/worktrees/*
+!/worktrees/README.md
+
+# Claude Code's built-in worktree feature puts its checkouts here instead of
+# ./worktrees/. Ignored so a stray one never shows up as untracked content;
+# worktrees/README.md has the intended location.
+.claude/worktrees/
