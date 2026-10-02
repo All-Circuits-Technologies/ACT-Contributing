@@ -151,6 +151,45 @@ if (defaultProductIdResult.isError) {
 }
 ```
 
+### RD20 - Do not exit a `try` or `catch` block early
+
+In a `try` statement with a `catch` clause, neither the `try` nor the `catch` block contains a
+`return`, `break` or `continue`: store the outcome in a variable and return it after the statement.
+`throw` and `rethrow` remain allowed.
+
+```dart
+// Avoid
+try {
+  return ResultWithStatus.ok(await sdk.fetch());
+} catch (e) {
+  _logsHelper.e("Fetch failed: $e");
+  return const ResultWithStatus(status: CatalogErrorCode.sdkError);
+}
+
+// Prefer
+ResultWithStatus<CatalogErrorCode, Data> result;
+try {
+  result = ResultWithStatus.ok(await sdk.fetch());
+} catch (e) {
+  _logsHelper.e("Fetch failed: $e");
+  result = const ResultWithStatus(status: CatalogErrorCode.sdkError);
+}
+
+return result;
+```
+
+A `try`/`finally` without a `catch` clause, used only to release a resource (a mutex, a file), may
+return from its `try` block:
+
+```dart
+await _mutex.acquire();
+try {
+  return await _readSharedState();
+} finally {
+  _mutex.release();
+}
+```
+
 ## Async, streams, resources
 
 ### RD13 - Never use `async void`
@@ -165,6 +204,28 @@ void loadData() async { await repo.fetch(); }
 
 // Prefer
 Future<void> loadData() async { await repo.fetch(); }
+```
+
+### RD21 - Return a `Future` from overridable value-providing methods
+
+A method meant to be overridden (in an abstract class, an interface or a mixin) that provides a
+value which could one day come from an external source (configuration, storage, a server) returns
+a `Future<T>`, not a `FutureOr<T>`, even when its current implementations return a constant. Expose
+such a value through a method, not a getter. A later switch to an asynchronous source then does not
+break the API ([RG20](coding-standards-global.md#rg20---design-for-foreseeable-evolution)).
+
+```dart
+// Avoid
+abstract class AbsDeviceInfo {
+  /// Get the label displayed for this device.
+  String getLabel();
+}
+
+// Prefer
+abstract class AbsDeviceInfo {
+  /// Get the label displayed for this device.
+  Future<String> getLabel();
+}
 ```
 
 ### RD14 - Use `ValueKeeperWithAndOnStream` for value + stream
