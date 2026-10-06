@@ -9,7 +9,7 @@ SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 How to contribute to an ACT repository. Read this before opening a pull or merge request.
 
 Everything is written in English: documentation, commits, branch names, and everything on
-GitHub/GitLab (pull/merge requests, issues, comments).
+GitHub (pull requests, issues, comments).
 
 By contributing, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 

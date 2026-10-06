@@ -103,6 +103,9 @@ as you progress: started, in review, merged into the stable branch, and so on.
 
 Code reaches a stable branch (`master`, `main`, `stable`) only through peer code review.
 
+A proof-of-concept project, one not meant for production, may skip the review; its code still goes
+through development branches ([RG8](#rg8---work-in-development-branches)).
+
 ## Building and delivery
 
 ### RG9 - Keep the code building
@@ -139,6 +142,26 @@ the source goes through a compiler.
 
 Every repository has a `README.md` at its root, with a short presentation of the project and a quick
 start covering how to install the dev environment, build the library or application, and deploy it.
+It also links to the coding standards the project follows: these standards and, if any, the
+project's own.
+
+### RG30 - Pin CI and container dependencies by digest
+
+In CI/CD definitions (GitHub Actions, GitLab CI, etc.) and Dockerfiles, reference external actions
+and container images by their immutable digest - a commit SHA for an action, a `sha256` digest for
+an image - never by a tag alone. A tag can be moved or deleted: pinning protects against
+supply-chain attacks, keeps builds reproducible, and avoids extra registry requests and rate limits.
+
+Keep the human-readable version next to the digest, so readers know what it is and can bump it: in a
+comment for an action, as the tag in the `name:tag@sha256:...` form for an image.
+
+```yaml
+- uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+```
+
+```dockerfile
+FROM debian:trixie@sha256:9cc080028c43b27d2074d63a5f9caf7166d731494965616c1a6d2827a004585c
+```
 
 ## Testing
 

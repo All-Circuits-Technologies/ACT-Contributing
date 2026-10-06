@@ -24,7 +24,8 @@
 # image layers and lets it self-update in the container's writable layer.
 # =============================================================================
 
-FROM debian:trixie AS base
+# Pinned by digest (RG30): bump the tag and the digest together.
+FROM debian:trixie@sha256:9cc080028c43b27d2074d63a5f9caf7166d731494965616c1a6d2827a004585c AS base
 
 # Avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive

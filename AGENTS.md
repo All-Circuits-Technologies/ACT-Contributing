@@ -17,18 +17,18 @@ follow. There is no application code here, and no build step - the "product" is 
 
 ## Repository layout
 
-| Path                                                            | Content                                      |
-| --------------------------------------------------------------- | -------------------------------------------- |
-| [`README.md`](README.md)                                        | Entry point and index                        |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md)                            | REUSE duties and PR/MR rules                 |
-| [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)                      | Contributor Covenant code of conduct         |
-| [`software/coding-standards.md`](software/coding-standards.md)  | Coding standards index and rule-id scheme    |
-| `software/coding-standards-global.md`                           | Language-agnostic rules (the `RGxx` rules)   |
-| `software/coding-standards-c.md`, `-cpp.md`, `-qt.md`           | Per-language rules (C, C++, Qt)              |
-| `software/coding-standards-flutter.md`                          | Dart and Flutter rules (`RDx`, `RFLx`)       |
-| `LICENSES/`                                                     | License texts referenced by SPDX headers     |
-| `.markdownlint.yaml`                                            | Markdown lint configuration (enforced by CI) |
-| `.github/workflows/`                                            | CI: `markdown_lint` and `reuse_compliance`   |
+| Path                                                           | Content                                      |
+| -------------------------------------------------------------- | -------------------------------------------- |
+| [`README.md`](README.md)                                       | Entry point and index                        |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md)                           | REUSE duties and PR/MR rules                 |
+| [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)                     | Contributor Covenant code of conduct         |
+| [`software/coding-standards.md`](software/coding-standards.md) | Coding standards index and rule-id scheme    |
+| `software/coding-standards-global.md`                          | Language-agnostic rules (the `RGxx` rules)   |
+| `software/coding-standards-c.md`, `-cpp.md`, `-qt.md`          | Per-language rules (C, C++, Qt)              |
+| `software/coding-standards-flutter.md`                         | Dart and Flutter rules (`RDx`, `RFLx`)       |
+| `LICENSES/`                                                    | License texts referenced by SPDX headers     |
+| `.markdownlint.yaml`                                           | Markdown lint configuration (enforced by CI) |
+| `.github/workflows/`                                           | CI: `markdown_lint` and `reuse_compliance`   |
 
 ## Golden rule
 
@@ -92,7 +92,7 @@ for the full duties. In short:
 ## Contribution workflow
 
 - **Language:** everything is written in **English** - documentation, commits, branch names, and
-  everything on GitHub/GitLab (PRs, MRs, issues, comments).
+  everything on GitHub (PRs, issues, comments).
 - **Work in a development branch**, never directly on `master` / the stable branch
   ([RG8](software/coding-standards-global.md#rg8---work-in-development-branches)).
 - **Every pull/merge request is linked to an issue**
