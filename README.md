@@ -15,4 +15,4 @@ repository is expected to follow them.
   requests. Read this before opening a request.
 - **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** - the code of conduct all contributors follow.
 - **[software/coding-standards.md](software/coding-standards.md)** - the coding standards to respect
-  in our software repositories, with per-language rules (global, C, C++, Qt).
+  in our software repositories, with per-language rules (global, C, C++, Qt, Flutter).
