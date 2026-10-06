@@ -1,0 +1,85 @@
+// SPDX-FileCopyrightText: 2026 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+//
+// SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+{
+  "name": "ACT-Contributing Docs Environment",
+  // Docker Compose based (see docker-compose.yml). The `dev` service carries the
+  // workspace mount and the tool config volumes. See README.md.
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "dev",
+  // SINGLE SOURCE OF TRUTH for the in-container workspace path: the clone is
+  // mounted here, and worktrees live inside it under ./worktrees/. The ONE value
+  // kept in sync by hand is the mount target in docker-compose.yml (a mount
+  // target inherently has to equal workspaceFolder); both files cross-reference
+  // each other.
+  "workspaceFolder": "/workspaces/act-contributing",
+  // No devcontainer features: every tool (a recent git built from source, reuse,
+  // gh, Node.js and markdownlint-cli2) is installed directly in the Dockerfile,
+  // which keeps versions explicit and reproducible in one place. Features are
+  // deliberately avoided - they have proven more trouble than help. Claude Code
+  // is the one exception, installed by postCreateCommand below (see its comment).
+  "mounts": [
+    // Mount .ssh from the host so git operations that require authentication work
+    // inside the container (the GitHub remote is git@github.com:...).
+    "source=${localEnv:HOME}/.ssh,target=/home/debian/.ssh,type=bind,consistency=cached"
+    // ~/.claude and ~/.config/gh are isolated named volumes
+    // (act-contributing-claude-config / -gh-config), declared and mounted in
+    // docker-compose.yml - not host bind mounts, so each container keeps its own
+    // logins and Claude's absolute in-container plugin paths never leak across
+    // containers. See README.md.
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "DavidAnson.vscode-markdownlint",
+        "yzhang.markdown-all-in-one",
+        "bierner.markdown-mermaid",
+        "MermaidChart.vscode-mermaid-chart",
+        "streetsidesoftware.code-spell-checker",
+        "EditorConfig.EditorConfig",
+        "psioniq.psi-header",
+        "mhutchie.git-graph",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "redhat.vscode-yaml",
+        "github.vscode-github-actions",
+        "ms-azuretools.vscode-containers"
+      ]
+    }
+  },
+  // Runs from the workspaceFolder, so paths are relative.
+  // - Relative git worktree paths, so a worktree created under ./worktrees/
+  //   resolves both from the container (/workspaces/act-contributing) and from
+  //   the host, whose clone path differs (only honoured by git >= 2.48).
+  //   Written to the SYSTEM config (/usr/local/etc/gitconfig, since git is built
+  //   with prefix=/usr/local - see the Dockerfile) on purpose: VS Code's
+  //   `dev.containers.copyGitConfig` copies the host ~/.gitconfig into the
+  //   container ONLY when ~/.gitconfig does not yet exist. A `git config --global`
+  //   here would create ~/.gitconfig first and silently suppress that copy,
+  //   leaving the container with no user.name / user.email. Writing --system keeps
+  //   ~/.gitconfig absent so the host identity still comes through.
+  // - The Claude Code CLI, via the official installer, which fetches a
+  //   self-contained native binary (no Node.js runtime). Installed here rather
+  //   than in the Dockerfile so the ~250MB binary and every version the CLI
+  //   self-updates to live in the container's writable layer, where the CLI's own
+  //   cleanup can reclaim them, instead of being pinned in an image layer forever.
+  //   It runs as remoteUser because everything goes under $HOME (the launcher in
+  //   ~/.local/bin, on PATH, and the binaries in ~/.local/share/claude/) and the
+  //   installer refuses to run under sudo. `latest` selects the latest release
+  //   channel. Authentication is interactive: run `claude` once and sign in; the
+  //   login lands in the ~/.claude volume and survives rebuilds. See README.md.
+  //   (markdownlint-cli2 is NOT here - it is baked into the Dockerfile.)
+  "postCreateCommand": {
+    "git worktree relative paths": "sudo git config --system worktree.useRelativePaths true",
+    "claude code": "curl -fsSL https://claude.ai/install.sh | bash -s latest"
+  },
+  // Use 'debian' as the default user inside the container
+  "remoteUser": "debian",
+  "containerEnv": {
+    // Point Claude's entire config (the ~/.claude data dir AND ~/.claude.json,
+    // which holds the login, onboarding and trusted-folder state) at the isolated
+    // named volume mounted here. This is what makes a single interactive `claude`
+    // sign-in survive rebuilds. See README.md.
+    "CLAUDE_CONFIG_DIR": "/home/debian/.claude"
+  }
+}

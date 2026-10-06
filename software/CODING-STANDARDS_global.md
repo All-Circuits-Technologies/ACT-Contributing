@@ -334,7 +334,7 @@ The project's textual files must contain a header, consisting of at least:
 ```txt
 SPDX-FileCopyrightText: YYYY First name Name <email>
 
-SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-XZ
+SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 ```
 
 This header has to be commented according to the language, i.e. prefixed with `//` for C/C++

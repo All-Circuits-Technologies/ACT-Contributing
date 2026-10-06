@@ -1,0 +1,63 @@
+# SPDX-FileCopyrightText: 2026 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+#
+# SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+
+# Dev container service for the ACT-Contributing documentation repository.
+#
+# The repository clone is mounted at /workspaces/act-contributing and nothing
+# else from the host is exposed. Git worktrees live inside the clone, under the
+# gitignored ./worktrees/ directory, so they need no extra mount - see README.md
+# and ../worktrees/README.md.
+#
+# No tool credentials are passed in from the host: git authenticates through the
+# mounted ~/.ssh (see devcontainer.json), and gh and Claude Code are signed into
+# from inside the container once - their config volumes below keep that login
+# across rebuilds.
+#
+# This is a docs-only repo: unlike a code dev container there is no privileged
+# mode, host networking or X11 forwarding here - none of it is needed to lint
+# Markdown or run REUSE.
+
+services:
+  dev:
+    build:
+      # Context is .devcontainer (this file's directory).
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USERNAME: debian
+    volumes:
+      # Workspace mount: the clone (`..`, the parent of this file's .devcontainer
+      # directory) at /workspaces/act-contributing. Worktrees added under
+      # ./worktrees/ (see ../worktrees/README.md) come along inside the clone, so
+      # no extra mount is needed.
+      #
+      # The target below MUST equal workspaceFolder in devcontainer.json (a mount
+      # target inherently has to). That file is the single source of truth; this
+      # is the one value kept in sync with it by hand.
+      - ..:/workspaces/act-contributing:cached
+      # Claude Code config (login, sessions, transcripts, plugin index;
+      # CLAUDE_CONFIG_DIR points here) in an ISOLATED named volume, NOT a host
+      # bind mount: Claude's plugin index stores absolute in-container paths that
+      # a shared host ~/.claude would leak across containers. The Dockerfile
+      # pre-creates ~/.claude so this volume initialises with user ownership.
+      - act-contributing-claude-config:/home/debian/.claude
+      # gh config (hosts + token written by `gh auth login`) in a named volume so
+      # the interactive login survives rebuilds. The Dockerfile pre-creates
+      # ~/.config/gh so this volume initialises with user ownership. Only the gh
+      # directory is mounted, never the whole ~/.config, so nothing else that
+      # lands there goes stale in a volume.
+      - act-contributing-gh-config:/home/debian/.config/gh
+    # The image's CMD is just bash; keep the service alive so VS Code can attach.
+    command: sleep infinity
+
+# One volume per tool rather than a shared credentials volume, so each can be
+# reset on its own (e.g. `docker volume rm act-contributing-gh-config` to force a
+# fresh gh login, without touching Claude).
+volumes:
+  # Isolated per-container Claude Code config. Persists across rebuilds, shared
+  # with nothing.
+  act-contributing-claude-config:
+  # Isolated per-container gh config. Persists across rebuilds, shared with
+  # nothing.
+  act-contributing-gh-config:
