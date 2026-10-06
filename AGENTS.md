@@ -17,17 +17,17 @@ follow. There is no application code here, and no build step - the "product" is 
 
 ## Repository layout
 
-| Path                                                           | Content                                      |
-| -------------------------------------------------------------- | -------------------------------------------- |
-| [`README.md`](README.md)                                       | Entry point and index                        |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md)                           | REUSE duties, PR/MR rules, Code of Conduct   |
-| [`README-reuse.md`](README-reuse.md)                           | How licensing/REUSE is organised here        |
-| [`software/CODING-STANDARDS.md`](software/CODING-STANDARDS.md) | Coding standards index and glossary          |
-| `software/CODING-STANDARDS_global.md`                          | Language-agnostic rules (the `RGxx` rules)   |
-| `software/CODING-STANDARDS_c.md`, `_cpp.md`, `_qt.md`          | Per-language rules                           |
-| `LICENSES/`                                                    | License texts referenced by SPDX headers     |
-| `.markdownlint.yaml`                                           | Markdown lint configuration (enforced by CI) |
-| `.github/workflows/`                                           | CI: `markdown_lint` and `reuse_compliance`   |
+| Path                                                            | Content                                      |
+| --------------------------------------------------------------- | -------------------------------------------- |
+| [`README.md`](README.md)                                        | Entry point and index                        |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md)                            | REUSE duties and PR/MR rules                 |
+| [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)                      | Contributor Covenant code of conduct         |
+| [`software/coding-standards.md`](software/coding-standards.md)  | Coding standards index and rule-id scheme    |
+| `software/coding-standards-global.md`                           | Language-agnostic rules (the `RGxx` rules)   |
+| `software/coding-standards-c.md`, `-cpp.md`, `-qt.md`           | Per-language rules (C, C++, Qt)              |
+| `LICENSES/`                                                     | License texts referenced by SPDX headers     |
+| `.markdownlint.yaml`                                            | Markdown lint configuration (enforced by CI) |
+| `.github/workflows/`                                            | CI: `markdown_lint` and `reuse_compliance`   |
 
 ## Golden rule
 
@@ -71,7 +71,7 @@ horizontal rules.
 ## Licensing (REUSE)
 
 Every file must carry SPDX information, or the REUSE CI fails. See [`CONTRIBUTING.md`](CONTRIBUTING.md)
-and [`README-reuse.md`](README-reuse.md) for the full duties. In short:
+for the full duties. In short:
 
 - Add a header to each new file, using a comment style the file's format supports:
 
@@ -93,13 +93,13 @@ and [`README-reuse.md`](README-reuse.md) for the full duties. In short:
 - **Language:** everything is written in **English** - documentation, commits, branch names, and
   everything on GitHub/GitLab (PRs, MRs, issues, comments).
 - **Work in a development branch**, never directly on `master` / the stable branch
-  ([RG8](software/CODING-STANDARDS_global.md#rg8---work-in-development-branches)).
+  ([RG8](software/coding-standards-global.md#rg8---work-in-development-branches)).
 - **Every pull/merge request is linked to an issue**
-  ([RG10](software/CODING-STANDARDS_global.md#rg10---feature-related-code)) and merged to the stable
-  branch only after review by an authorized reviewer
-  ([RG26](software/CODING-STANDARDS_global.md#rg26---the-code-in-stable-branch-has-to-be-peer-reviewed)).
+  ([RG10](software/coding-standards-global.md#rg10---tie-code-to-a-requested-feature)) and merged to
+  the stable branch only after review by an authorized reviewer
+  ([RG26](software/coding-standards-global.md#rg26---peer-review-code-before-it-enters-a-stable-branch)).
 - Repository members branch inside the repo; external contributors work from a fork. See
-  [`CONTRIBUTING.md`](CONTRIBUTING.md#pull-and-merge-request).
+  [`CONTRIBUTING.md`](CONTRIBUTING.md#pull-and-merge-requests).
 
 ## The standards themselves
 

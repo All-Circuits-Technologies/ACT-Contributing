@@ -14,3 +14,6 @@
 # ./worktrees/. Ignored so a stray one never shows up as untracked content;
 # worktrees/README.md has the intended location.
 .claude/worktrees/
+
+# This folder contains debug files that should not be committed
+debug/
