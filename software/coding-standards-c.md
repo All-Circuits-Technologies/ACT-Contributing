@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2024 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+SPDX-FileCopyrightText: 2024 - 2026 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
 SPDX-FileCopyrightText: 2025 Pierre-Noel Bouteville <pierre-noel.bouteville@allcircuits.com>
 
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
@@ -12,26 +12,6 @@ Coding standards for C projects. This standard overloads the
 [coding standards index](coding-standards.md) for how the standards combine and the override
 mechanism. Like every ACT standard, it covers only what a linter cannot enforce (see
 [what belongs here](coding-standards.md#what-belongs-here)).
-
-## Table of contents
-
-- [C code standards](#c-code-standards)
-  - [RC1 - Documentation](#rc1---documentation)
-  - [RC2 - Function documentation](#rc2---function-documentation)
-  - [RC3 - Structures documentation](#rc3---structures-documentation)
-  - [RC4 - Documentation of enums](#rc4---documentation-of-enums)
-  - [RC5 - Organisation of header files](#rc5---organisation-of-header-files)
-  - [RC6 - TODO](#rc6---todo)
-  - [RC7 - One file per class or fonctionnality](#rc7---one-file-per-class-or-fonctionnality)
-  - [RC8 - Naming conventions](#rc8---naming-conventions)
-  - [RC9 - Braces](#rc9---braces)
-  - [RC10 - Maximum number of characters per line](#rc10---maximum-number-of-characters-per-line)
-  - [RC11 - Indentation](#rc11---indentation)
-  - [RC12 - Initialisation of structures](#rc12---initialisation-of-structures)
-  - [RC13 - Table pointer usage](#rc13---table-pointer-usage)
-  - [RC14 - Enumeration values](#rc14---enumeration-values)
-  - [RC15 - Macro global parentheses](#rc15---macro-global-parentheses)
-  - [RC16 - Macro arguments parentheses](#rc16---macro-arguments-parentheses)
 
 ## C code standards
 

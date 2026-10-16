@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2024 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+SPDX-FileCopyrightText: 2024 - 2026 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
 
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 -->
@@ -11,16 +11,6 @@ Coding standards for Qt projects. This standard overloads the
 [coding standards index](coding-standards.md) for how the standards combine and the override
 mechanism. Like every ACT standard, it covers only what a linter cannot enforce (see
 [what belongs here](coding-standards.md#what-belongs-here)).
-
-## Table of contents
-
-- [Qt specific code standards - with standard C++](#qt-specific-code-standards---with-standard-c)
-  - [RQT1 - Inherits from QObject](#rqt1---inherits-from-qobject)
-  - [RQT2 - QObject and inheritance](#rqt2---qobject-and-inheritance)
-  - [RQT3 - Macro Q\_OBJECT](#rqt3---macro-q_object)
-- [Qt specific code standards - with C++11](#qt-specific-code-standards---with-c11)
-  - [RQTCPP11-1 - Signals and slots](#rqtcpp11-1---signals-and-slots)
-  - [RQTCPP11-2 - Signals and slots, excluding library](#rqtcpp11-2---signals-and-slots-excluding-library)
 
 ## Qt specific code standards - with standard C++
 

@@ -106,5 +106,6 @@ for the full duties. In short:
 
 When a task touches the coding standards, read the relevant file in full before editing - the rules
 cross-reference each other by `RGxx` identifier, and those identifiers are a stable public API that
-other repositories link to. Do not renumber or remove an `RGxx` rule without understanding who links
-to it.
+other repositories link to. Never renumber a rule nor delete it: a removed rule keeps its heading,
+suffixed with `(removed)` (see [Rule ids](software/coding-standards.md#rule-ids)). Never apply a
+removed rule nor cite it as a current requirement.

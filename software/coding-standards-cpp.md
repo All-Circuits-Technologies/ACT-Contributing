@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2024 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
+SPDX-FileCopyrightText: 2024 - 2026 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
 
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 -->
@@ -11,57 +11,6 @@ Coding standards for C++ projects. This standard overloads the
 [coding standards index](coding-standards.md) for how the standards combine and the override
 mechanism. Like every ACT standard, it covers only what a linter cannot enforce (see
 [what belongs here](coding-standards.md#what-belongs-here)).
-
-## Table of contents
-
-- [C++ code standards](#c-code-standards)
-  - [RCPP1 - Instance attributes of a private class](#rcpp1---instance-attributes-of-a-private-class)
-  - [RCPP2 - Attribute accessors](#rcpp2---attribute-accessors)
-  - [RCPP3 - Simple accessors in headers](#rcpp3---simple-accessors-in-headers)
-  - [RCPP4 - Use reference](#rcpp4---use-reference)
-  - [RCPP5 - Objects destroying](#rcpp5---objects-destroying)
-  - [RCPP6 - The destructor is "virtual"](#rcpp6---the-destructor-is-virtual)
-  - [RCPP7 - Methods to override are "virtual"](#rcpp7---methods-to-override-are-virtual)
-  - [RCPP8 - The constructor is "explicit"](#rcpp8---the-constructor-is-explicit)
-  - [RCPP9 - Constant method](#rcpp9---constant-method)
-  - [RCPP10 - Include in headers](#rcpp10---include-in-headers)
-  - [RCPP11 - The `#pragma once`](#rcpp11---the-pragma-once)
-  - [RCPP12 - Syntactic organization of header files](#rcpp12---syntactic-organization-of-header-files)
-  - [RCPP13 - Syntactic organization of source files](#rcpp13---syntactic-organization-of-source-files)
-  - [RCPP14 - Code documentation](#rcpp14---code-documentation)
-  - [RCPP15 - Code documentation of functions/methods](#rcpp15---code-documentation-of-functionsmethods)
-  - [RCPP16 - Code documentation of classes](#rcpp16---code-documentation-of-classes)
-  - [RCPP17 - Code documentation of structures](#rcpp17---code-documentation-of-structures)
-  - [RCPP18 - Code documentation of enumeration](#rcpp18---code-documentation-of-enumeration)
-  - [RCCP19 - Classes and namespaces naming](#rccp19---classes-and-namespaces-naming)
-  - [RCCP20 - Local variables naming](#rccp20---local-variables-naming)
-  - [RCCP21 - Class methods naming](#rccp21---class-methods-naming)
-  - [RCCP22 - Class member naming](#rccp22---class-member-naming)
-  - [RCPP23 - Method parameters naming](#rcpp23---method-parameters-naming)
-  - [RCPP24 - Enumeration naming](#rcpp24---enumeration-naming)
-  - [RCPP25 - Structure naming](#rcpp25---structure-naming)
-  - [RCPP26 - Static methods naming](#rcpp26---static-methods-naming)
-  - [RCPP27 - Constant static class members naming](#rcpp27---constant-static-class-members-naming)
-  - [RCPP28 - File naming](#rcpp28---file-naming)
-  - [RCPP29 - Macro naming](#rcpp29---macro-naming)
-  - [RCPP30 - Add units in names](#rcpp30---add-units-in-names)
-  - [RCPP31 - One brace equals one line](#rcpp31---one-brace-equals-one-line)
-  - [RCPP32 - One file per class, namespace, enum or structure](#rcpp32---one-file-per-class-namespace-enum-or-structure)
-  - [RCPP33 - Use the latest revision of C++](#rcpp33---use-the-latest-revision-of-c)
-  - [RCPP34 - Default pointer initialization](#rcpp34---default-pointer-initialization)
-  - [RCPP35 - Namespace and utility functions](#rcpp35---namespace-and-utility-functions)
-  - [RCPP36 - Utility class and functions](#rcpp36---utility-class-and-functions)
-  - [RCPP37 - Use iterators](#rcpp37---use-iterators)
-  - [RCPP38 - Use constant iterators](#rcpp38---use-constant-iterators)
-- [C++11 code standards](#c11-code-standards)
-  - [RCPP11-1 - Use constant iterators](#rcpp11-1---use-constant-iterators)
-  - [RCPP11-2 - Virtual method override](#rcpp11-2---virtual-method-override)
-  - [RCPP11-3 - Attributes default initialization](#rcpp11-3---attributes-default-initialization)
-  - [RCPP11-4 - Use nullptr](#rcpp11-4---use-nullptr)
-  - [RCPP11-5 - Default pointer initialization](#rcpp11-5---default-pointer-initialization)
-  - [RCPP11-6 - Constant values](#rcpp11-6---constant-values)
-  - [RCPP11-7 - constexpr, constant values and literal type](#rcpp11-7---constexpr-constant-values-and-literal-type)
-  - [RCPP11-8 - Global constant values](#rcpp11-8---global-constant-values)
 
 ## C++ code standards
 
@@ -727,7 +676,7 @@ enum MyEnum
 }
 ```
 
-### RCCP19 - Classes and namespaces naming
+### RCPP19 - Classes and namespaces naming
 
 **Class and namespace names** must respect **UpperCamelCase**.
 
@@ -743,7 +692,7 @@ class MyClass
 };
 ```
 
-### RCCP20 - Local variables naming
+### RCPP20 - Local variables naming
 
 The **name of local variables** must respect the **lowerCamelCase**.
 
@@ -753,7 +702,7 @@ Example:
 int myVar;
 ```
 
-### RCCP21 - Class methods naming
+### RCPP21 - Class methods naming
 
 The **method name** must respect the **lowerCamelCase**.
 
@@ -767,7 +716,7 @@ class MyClass
 };
 ```
 
-### RCCP22 - Class member naming
+### RCPP22 - Class member naming
 
 A **class member name** must respect the **lowerCamelCase** and begins with an underscore.
 

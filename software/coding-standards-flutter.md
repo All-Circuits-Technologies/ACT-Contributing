@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2026 Benoit Rolandeau <benoit.rolandeau@allcircuits.com>
 SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 -->
 
-# Flutter coding standards <!-- omit in toc -->
+# Flutter coding standards
 
 Dart, Flutter and ACT-architecture conventions, reusable across ACT projects. Each rule has a stable
 id (`RDx` for Dart, `RFLx` for Flutter and ACT architecture) so it can be cited in code review.
@@ -22,24 +22,6 @@ This guide does **not** restate what the linter enforces. Follow standard
 ACT-Flutter-Packages - configure them and let CI enforce them. The rules below cover only what a
 linter cannot see: architectural decisions, ACT package usage, and conventions with more than one
 reasonable option.
-
-## Table of content <!-- omit in toc -->
-
-- [Naming and files](#naming-and-files)
-- [Types, immutability, equality](#types-immutability-equality)
-- [Null-safety and error handling](#null-safety-and-error-handling)
-- [Async, streams, resources](#async-streams-resources)
-- [Documentation and generated code](#documentation-and-generated-code)
-- [Widgets and composition](#widgets-and-composition)
-- [State management (BLoC)](#state-management-bloc)
-- [Application architecture](#application-architecture)
-- [Configuration and logging](#configuration-and-logging)
-- [Routing](#routing)
-- [Internationalization](#internationalization)
-- [Assets and themes](#assets-and-themes)
-- [Security](#security)
-- [Performance](#performance)
-- [Sources](#sources)
 
 ## Naming and files
 
