@@ -618,10 +618,11 @@ enum AbcRoute with MixinRoute {
 }
 ```
 
-### RFL29 - Map routes to pages in a `RoutesNameHelper`
+### RFL29 - Map routes to pages in an `XxxRoutesHelper`
 
-Map routes to pages in a `RoutesNameHelper extends AbstractRoutesHelper<T>`, registering each
-route with `onPage(route, _createXxxPage)` in the constructor.
+Map routes to pages in an `XxxRoutesHelper extends AbstractRoutesHelper<T>`, prefixed with the
+project code like every project-specific type (RD1), registering each route with
+`onPage(route, _createXxxPage)` in the constructor.
 
 ### RFL30 - Retrieve route extras with `checkAndCastExtra<T>`
 
