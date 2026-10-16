@@ -466,8 +466,7 @@ as the manager, right above it.
 
 ### RFL17 - Declare init ordering with `dependsOn()`
 
-Declare inter-manager init ordering by overriding `dependsOn()` on the builder rather than relying
-on registration order alone:
+Declare inter-manager init ordering by overriding `dependsOn()` on the builder:
 
 ```dart
 class OrderManagerBuilder extends AbsLifeCycleFactory<OrderManager> {
@@ -502,16 +501,19 @@ Retrieve any manager via `globalGetIt().get<ManagerType>()`; never call `GetIt.i
 ### RFL20 - Start the app with `AbsUiGlobalManager` + `runActApp()`
 
 The app's global manager extends `AbsUiGlobalManager`, registers every manager inside
-`registerManagers()` using `registerManagerAsync<T>(const XxxBuilder())` **in dependency order**,
-and is started from `main()` with a single call:
+`registerManagers()` using `registerManagerAsync<T>(const XxxBuilder())`, and is started from
+`main()` with a single call. The managers initialize in the order their builders declare with
+`dependsOn()`:
 
 ```dart
 class AbcGlobalManager extends AbsUiGlobalManager {
+  // A static `instance` getter, written by the app, creates and returns the singleton.
+
   @override
   Future<void> registerManagers() async {
     registerManagerAsync<AbcConfigManager>(const AbcConfigBuilder());
     registerManagerAsync<LoggerManager>(ExtDefaultLoggerBuilder<AbcConfigManager>());
-    // ... one registerManagerAsync per manager, dependencies first
+    // ... one registerManagerAsync per manager
   }
 }
 
@@ -586,10 +588,11 @@ class AbcConfigManager extends AbsUsualConfigManager with MixinLocaleConfig {
 }
 ```
 
-### RFL25 - Register `LoggerManager` right after config
+### RFL25 - Make every manager which logs depend on `LoggerManager`
 
-Register `LoggerManager` immediately after the config manager in `registerManagers()` - every
-manager registered afterwards can depend on it.
+A manager which logs declares `LoggerManager` in its builder's `dependsOn()`, so that it logs
+through the configured loggers from its initialization on. The logger manager itself depends on the
+config manager.
 
 ### RFL26 - One `LogsHelper` per class, built into a hierarchy
 
