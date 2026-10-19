@@ -17,15 +17,6 @@ standard may tighten a value; the most specific one wins: `project > language > 
 
 **Every rule below is blocking: a merge request that violates one is not merged until it is fixed.**
 
-## Table of contents
-
-- [Language and formatting](#language-and-formatting)
-- [Version control and workflow](#version-control-and-workflow)
-- [Building and delivery](#building-and-delivery)
-- [Testing](#testing)
-- [Design and code quality](#design-and-code-quality)
-- [Licensing](#licensing)
-
 ## Language and formatting
 
 ### RG1 - No more than 1000 lines

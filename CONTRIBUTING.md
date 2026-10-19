@@ -13,12 +13,6 @@ GitHub (pull requests, issues, comments).
 
 By contributing, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## Table of contents
-
-- [Coding standards](#coding-standards)
-- [Licensing (REUSE)](#licensing-reuse)
-- [Pull and merge requests](#pull-and-merge-requests)
-
 ## Coding standards
 
 Follow the [coding standards](software/coding-standards.md). They apply to every ACT software
