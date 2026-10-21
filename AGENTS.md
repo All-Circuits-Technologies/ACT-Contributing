@@ -26,6 +26,7 @@ follow. There is no application code here, and no build step - the "product" is 
 | `software/coding-standards-global.md`                          | Language-agnostic rules (the `RGxx` rules)   |
 | `software/coding-standards-c.md`, `-cpp.md`, `-qt.md`          | Per-language rules (C, C++, Qt)              |
 | `software/coding-standards-flutter.md`                         | Dart and Flutter rules (`RDx`, `RFLx`)       |
+| `software/coding-standards-shell.md`                           | Shell script rules (`RSHELLx`)               |
 | `LICENSES/`                                                    | License texts referenced by SPDX headers     |
 | `.markdownlint.yaml`                                           | Markdown lint configuration (enforced by CI) |
 | `.github/workflows/`                                           | CI: `markdown_lint` and `reuse_compliance`   |

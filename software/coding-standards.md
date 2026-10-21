@@ -49,6 +49,7 @@ prefix tells you which standard a rule belongs to:
 | `RCPP`            | C++              |
 | `RQT`, `RQTCPP11` | Qt               |
 | `RD`, `RFL`       | Dart and Flutter |
+| `RSHELL`          | Shell            |
 
 An id is a stable public API: other repositories cite it in code review and link to it. A rule's
 wording may change, but its id never moves to a different rule and is never reused.
@@ -76,7 +77,8 @@ overrides the previous ones (see [How the standards combine](#how-the-standards-
 | C++ code (`.cpp`, `.hpp`, and `.h` in a C++ project)                        | [Global], [C++]             |
 | C++ code of a Qt project (`find_package(Qt...)` in CMake, or a `.pro` file) | [Global], [C++], [Qt]       |
 | Dart or Flutter code (`.dart`, `pubspec.yaml`)                              | [Global], [Flutter]         |
-| Anything else (documentation, scripts, CI, ...)                             | [Global]                    |
+| Shell scripts (`.sh`, or a `sh`/`bash` shebang)                             | [Global], [Shell]           |
+| Anything else (documentation, other scripts, CI, ...)                       | [Global]                    |
 
 The project's own standards, when it has some, are read last and override all of these.
 
@@ -85,3 +87,4 @@ The project's own standards, when it has some, are read last and override all of
 [C++]: coding-standards-cpp.md
 [Qt]: coding-standards-qt.md
 [Flutter]: coding-standards-flutter.md
+[Shell]: coding-standards-shell.md
