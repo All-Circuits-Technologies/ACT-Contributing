@@ -78,6 +78,18 @@ Any other overridden member takes the place of its kind: `build`, `initLifeCycle
 are public methods. `props` and the release methods stay at the end, in this order, even when
 overridden. In an enum, the values come first.
 
+## Dependencies
+
+### RD24 - Order `pubspec.yaml` dependencies by origin
+
+In `dependencies`, `dev_dependencies` and `dependency_overrides`, list the packages in these
+groups, each sorted alphabetically:
+
+1. the SDK packages (`sdk: flutter`)
+2. the third-party packages
+3. the ACT packages
+4. the project's own packages
+
 ## Types, immutability, equality
 
 ### RD4 - Make models immutable and `Equatable`
