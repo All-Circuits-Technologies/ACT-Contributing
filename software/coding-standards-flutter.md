@@ -46,6 +46,38 @@ hand-group imports by category.
 A package/app exposes a single barrel file (`lib/<name>.dart`) that `export`s its public API;
 implementation lives under a private `src/` folder not imported directly by consumers.
 
+### RD22 - Put each public type in its own file
+
+Each public class, mixin, enum and extension lives in its own file. Private types (`_Xxx`) that
+only serve that public type may share its file. Typedefs are not concerned.
+
+Two exceptions:
+
+- A `sealed` class and all its subclasses share one file. The main case is a BLoC's events, all in
+  `<feature>_event.dart` (RFL8, RFL22).
+- A manager's builder stays in the manager's file (RFL16).
+
+### RD23 - Order class members by kind
+
+Inside a class, mixin, enum or extension, declare members in this order, skipping absent groups:
+
+1. public `static const` fields
+2. private `static const` fields
+3. other static fields (`static final`, `static`), public then private
+4. instance fields, public then private
+5. getters and setters, public then private
+6. constructors: the unnamed one first, then the named ones, then the `factory` ones
+7. public methods
+8. private methods
+9. public static methods
+10. private static methods
+11. the `props` getter of an `Equatable`
+12. the methods releasing the object's resources: `close`, `dispose`, `disposeLifeCycle`
+
+Any other overridden member takes the place of its kind: `build`, `initLifeCycle` and `toString`
+are public methods. `props` and the release methods stay at the end, in this order, even when
+overridden. In an enum, the values come first.
+
 ## Types, immutability, equality
 
 ### RD4 - Make models immutable and `Equatable`
@@ -278,8 +310,9 @@ Widget _buildHeader() => Text(title);
 
 // Prefer - independently rebuildable, can be const, its own inspector node.
 class _Header extends StatelessWidget {
-  const _Header({required this.title});
   final String title;
+
+  const _Header({required this.title});
 
   @override
   Widget build(BuildContext context) => Text(title);
@@ -321,6 +354,17 @@ For responsive layouts, initialize `ScreenUtilInit` once at the app root widget 
 `.w`/`.h`/`.sp` extensions (or `LayoutBuilder` for structural breakpoints) in widgets; do not
 hardcode logical pixel sizes.
 
+### RFL40 - Make a widget of every repeated visual element
+
+When a visual element appears more than once in the app's mockups, implement it as a dedicated
+widget, never as a function returning a `Widget` (top-level function, static method or method, see
+RFL2). Variants of the same element (another text, color or icon) are one widget taking parameters.
+Visibility follows usage:
+
+- an element repeated within a single file is a private widget (`_Xxx`) in that file;
+- an element used by several files is a public widget in its own file (RD22) under `ui/widgets/`
+  (RFL21).
+
 ## State management (BLoC)
 
 ### RFL6 - Do not cache `InheritedWidget` lookups
@@ -345,8 +389,9 @@ sealed class DashboardEvent extends BlocEventForMixin {
 }
 
 class ItemSelectedEvent extends DashboardEvent {
-  const ItemSelectedEvent({required this.itemId});
   final int itemId;
+
+  const ItemSelectedEvent({required this.itemId});
 
   @override
   List<Object?> get props => [...super.props, itemId];
