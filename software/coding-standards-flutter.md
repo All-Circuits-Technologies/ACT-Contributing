@@ -158,13 +158,30 @@ enum CatalogErrorCode { ok, timeout, serverUnavailable }
 Use `late final` for fields whose value is known only after `initLifeCycle` (or an equivalent
 async init step), not for values that could be computed eagerly.
 
-### RD11 - Reserve exceptions for the throwing boundary
+### RD11 - Never propagate an error as an exception
 
-Errors are propagated as `Result`, never through exceptions used for control flow. `try`/`catch`
-is reserved for the boundary where a third-party library or SDK actually throws: catch narrowly,
-log, and convert to a `Result`/status there. An explicit `throw` is acceptable only to fail fast
-during development (an unrecoverable invariant violation), not as an error channel for expected
-failure cases.
+An expected failure is a value (a `Result` or a status, see RD8), never an exception: no `throw`,
+no `Future` completed with an error, no error emitted in a `Stream` (`addError`, `throw` in an
+`async*`).
+
+Throw only in these cases:
+
+- at startup, when the app cannot work without what failed: in a manager's `initLifeCycle()`, in
+  the creation or the instance getter of a singleton created at startup, or in a method called
+  only at startup. The app then shows its fatal error page (RFL39);
+- to fail fast on a development mistake that a correct program never triggers: an unsupported
+  generic type, a route extra of the wrong type, an unimplemented stub. A failure that can happen
+  at runtime (a denied permission, a disabled Bluetooth, a device not found) is never such a
+  mistake;
+- in the implementation of an interface defined by a third-party package, when its imposed
+  signature leaves no other way to report a failure.
+
+Every call to an API outside the ACT packages, the Dart and Flutter SDKs included, that can throw,
+complete its `Future` with an error or emit an error in its `Stream`, is caught at the call, logged
+and converted into a `Result` or a status.
+
+For an operation publishing its progress, prefer returning its outcome as a `Result` and publishing
+its progress on a separate stream.
 
 ### RD12 - Compose `Result`s with early returns
 
