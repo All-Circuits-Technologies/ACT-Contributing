@@ -193,13 +193,16 @@ usually known, so account for it during design while staying close to the primar
 For example, if the client asks for shoes and expects to run in them later, sneakers are a better
 base design than sandals or dress shoes.
 
-### RG24 - No dead code without a justification
+### RG24 - No dead or temporary code without a TODO
 
-No dead code: neither commented-out code nor code that is never called. Dead code raises the reading
-cost and misleads readers about how the feature actually works.
+Precede dead code and temporary code with a `TODO` comment in the
+[RG25](#rg25---use-the-todo-and-fixme-comment-style) style that states why the code is there:
 
-Keep dead code only for a stated reason - a class not wired up yet, an example kept on purpose - and
-write that reason in a comment right before it. The reviewer judges whether the justification holds.
+- dead code is commented-out code or code that is never called;
+- temporary code stands in for something not implemented yet: a delay simulating a missing part, a
+  stub, a hard-coded value replacing real data. Its `TODO` also states what will replace it.
+
+The reviewer judges whether the justification holds.
 
 ### RG25 - Use the TODO and FIXME comment style
 
