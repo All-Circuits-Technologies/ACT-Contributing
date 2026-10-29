@@ -503,8 +503,12 @@ too. Only a field holding a resource the BLoC reassigns during its life (`Stream
 ### RFL42 - Update a state through named copy methods
 
 A BLoC never calls `copyWith`, nor the generic copy method of a state mixin
-(`copy<Mixin>State`). It calls a named copy method of the state, `copyWith<Intent>`, named after
-the change it makes, such as `copyWithLoading()` or `copyWithLoadedUser(user: ...)`. This method:
+(`copy<Mixin>State`). It calls a named copy method of the state, whose name starts with either:
+
+- `copyWith<Intent>`, named after the change it makes, such as `copyWithLoadedUser(user: ...)`;
+- `copyTo<WantedState>`, named after the state it leads to, such as `copyToLoadingState()`.
+
+This method:
 
 - takes the values of that change as `required` parameters;
 - calls `copyWith` (or the mixin's generic copy method) and sets every field the change affects,
