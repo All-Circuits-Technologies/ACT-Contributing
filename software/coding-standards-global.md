@@ -63,7 +63,7 @@ and triaged: fix now, or plan for a later cycle. Name it `master`, `main`, or `s
 Develop in a working branch, never directly on the stable branch. Branch names follow the pattern:
 
 ```text
-tmp/xxxx-branch-name
+xxxx-branch-name
 ```
 
 - `xxxx`: the id of the associated task in your tracker (Redmine, Jira, GitHub, GitLab, etc.)
@@ -72,7 +72,7 @@ tmp/xxxx-branch-name
 For example:
 
 ```text
-tmp/845-add-main-app-logo
+845-add-main-app-logo
 ```
 
 ### RG10 - Tie code to a requested feature
