@@ -109,20 +109,13 @@ class Product extends Equatable {
 }
 ```
 
-### RD5 - Keep `copyWith` parameters nullable
+### RD5 - Keep `copyWith` parameters nullable, with a force flag for nullable fields
 
-`copyWith` parameters are nullable and default to the current value. Because a nullable parameter
-cannot distinguish "keep the current value" from "set it to `null`", expose a dedicated method
-when a field must actually be cleared:
-
-```dart
-// copyWith cannot clear `product`: `product ?? this.product` keeps the old value.
-SessionState copyWith({Product? product}) =>
-    SessionState(product: product ?? this.product);
-
-// A dedicated method expresses the "clear" intent explicitly.
-SessionState clearProduct() => SessionState(product: null);
-```
+In every immutable class with a `copyWith` (models and BLoC states), every `copyWith` parameter is
+nullable and defaults to the current value of its field. For each field whose declared type is
+nullable (`Product? product`), `copyWith` also takes a `bool force<Field>Value = false` parameter,
+declared right after the field's parameter: when it is `true`, `copyWith` applies the given value
+even when it is `null`. A field with a non-nullable declared type has no force parameter.
 
 ### RD6 - Use `enum` for closed sets
 
@@ -427,18 +420,17 @@ class ItemSelectedEvent extends DashboardEvent {
 }
 ```
 
-### RFL9 - Initialize state with a named `init` constructor
+### RFL9 - Give a state a full constructor and an `init` constructor
 
-State is immutable, exposes a **named `init` constructor** (`const` when possible) for its
-initial value, and a `copyWith` for updates. Prefer `init` over a `factory .initial()`, so every
-state follows the same convention:
+A state is immutable and has two constructors:
 
-```dart
-class MainAppState extends BlocStateForMixin<MainAppState> {
-  const MainAppState.init() : wantedLocale = null;
-  // ...
-}
-```
+- the unnamed constructor, which takes every member as a `required` parameter;
+- a named `init` constructor (`const` when possible), which sets the initial values. It takes
+  `required` parameters only for the values known when the BLoC is created.
+
+`init` is called only from the BLoC constructor, to give its initial state, and from the `init`
+constructor of a derived state. To bring a state back to initial values later, the state exposes
+a named copy method (RFL42).
 
 ### RFL10 - Register events via `registerMixinEvents`
 
@@ -500,6 +492,27 @@ class MyPageBloc extends BlocForMixin<MyPageState> with MixinPageWithOverlay<MyP
   MyPageBloc() : super(const MyPageState.init());
 }
 ```
+
+### RFL41 - Keep only final members in a BLoC
+
+Every instance field of a BLoC is `final` or `late final`. Data that changes over the BLoC's life
+lives in its state: a `final` field holding a collection whose content changes breaks this rule
+too. Only a field holding a resource the BLoC reassigns during its life (`StreamSubscription`,
+`Timer`, `CancelableOperation`, ...) may be non-final.
+
+### RFL42 - Update a state through named copy methods
+
+A BLoC never calls `copyWith`, nor the generic copy method of a state mixin
+(`copy<Mixin>State`). It calls a named copy method of the state, whose name starts with either:
+
+- `copyWith<Intent>`, named after the change it makes, such as `copyWithLoadedUser(user: ...)`;
+- `copyTo<WantedState>`, named after the state it leads to, such as `copyToLoadingState()`.
+
+This method:
+
+- takes the values of that change as `required` parameters;
+- calls `copyWith` (or the mixin's generic copy method) and sets every field the change affects,
+  including the `force<Field>Value` flags (RD5).
 
 ### RFL14 - Keep `createState()` free of logic
 
