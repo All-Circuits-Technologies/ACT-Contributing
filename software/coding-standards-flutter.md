@@ -109,6 +109,15 @@ class Product extends Equatable {
 }
 ```
 
+### RD25 - Initialize instance fields in the constructor
+
+In a class, initialize every instance field whose value is known at construction in a generative
+constructor, through an initializing formal (`this.x`) or the initializer list, never at its
+declaration. When the class declares no constructor, declare one for this. A field whose value is
+known only after construction follows RD10.
+
+This rule overrides Effective Dart's "DO initialize fields at their declaration when possible".
+
 ### RD5 - Keep `copyWith` parameters nullable, with a force flag for nullable fields
 
 In every immutable class with a `copyWith` (models and BLoC states), every `copyWith` parameter is
