@@ -576,7 +576,15 @@ The app's global manager extends `AbsUiGlobalManager`, registers every manager i
 
 ```dart
 class AbcGlobalManager extends AbsUiGlobalManager {
-  // A static `instance` getter, written by the app, creates and returns the singleton.
+  static AbcGlobalManager get instance {
+    if (AbsGlobalManager.instance == null) {
+      AbsGlobalManager.setInstance = AbcGlobalManager._create();
+    }
+
+    return AbsGlobalManager.instance! as AbcGlobalManager;
+  }
+
+  AbcGlobalManager._create() : super.create();
 
   @override
   Future<void> registerManagers() async {
@@ -652,7 +660,7 @@ No hardcoded configuration values in the codebase. Configuration extends
 `AbsUsualConfigManager` and exposes each value as a `const ConfigVar<T>("path.to.value")`:
 
 ```dart
-class AbcConfigManager extends AbsUsualConfigManager with MixinLocaleConfig {
+class AbcConfigManager extends AbsUsualConfigManager {
   final serverHostname = const ConfigVar<String>("server.hostname");
 }
 ```
