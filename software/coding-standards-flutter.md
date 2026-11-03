@@ -118,11 +118,6 @@ known only after construction follows RD10.
 
 This rule overrides Effective Dart's "DO initialize fields at their declaration when possible".
 
-### RD26 - Declare constructors in the class body
-
-Declare the fields and the constructors of a class in its body, as RD23 and RD25 describe. Do not
-use primary constructors, which declare them in the class header.
-
 ### RD5 - Keep `copyWith` parameters nullable, with a force flag for nullable fields
 
 In every immutable class with a `copyWith` (models and BLoC states), every `copyWith` parameter is
@@ -400,23 +395,6 @@ Visibility follows usage:
 - an element repeated within a single file is a private widget (`_Xxx`) in that file;
 - an element used by several files is a public widget in its own file (RD22) under `ui/widgets/`
   (RFL21).
-
-### RFL43 - Import Material and Cupertino from `material_ui` and `cupertino_ui`
-
-Build the UI with Material widgets, imported from `package:material_ui/material_ui.dart`. Import
-Cupertino widgets, from `package:cupertino_ui/cupertino_ui.dart`, only for a widget that must look
-like iOS on every platform: adaptive Material widgets such as `Scrollbar`, `Switch.adaptive` and
-`CircularProgressIndicator.adaptive` already take the iOS look on iOS. A file that uses no Material
-nor Cupertino widget imports `package:flutter/widgets.dart`, or `package:flutter/foundation.dart`
-when it uses no widget at all.
-
-Never import `package:flutter/material.dart` nor `package:flutter/cupertino.dart`. Their types
-(`ThemeData`, `MaterialLocalizations`, ...) are distinct from the `material_ui` and `cupertino_ui`
-ones and do not mix: an app and every package it uses import Material and Cupertino from
-`material_ui` and `cupertino_ui`.
-
-Declare `material_ui` in `pubspec.yaml` when a file imports it, and `cupertino_ui` only when a file
-imports it: `material_ui` already depends on `cupertino_ui`.
 
 ## State management (BLoC)
 
@@ -767,24 +745,11 @@ globalGetIt().get<AbcRoutesManager>().push(AbcRoute.settings);
 All user-facing strings live in ARB files (`l10n/intl_<locale>.arb`); no literal user-visible
 string in Dart code.
 
-### RFL33 - Register the `material_ui` localization delegates
+### RFL33 - Register all four localization delegates
 
-On the root `MaterialApp`, register `Tr.delegate`, the delegates of
-`GlobalMaterialLocalizations.delegates` and `supportedLocales`. Import `GlobalMaterialLocalizations`
-from `material_ui` (RFL43): its `delegates` list holds the Material, Cupertino and Widgets
-delegates. `material_ui` already depends on `flutter_localizations`: neither declare nor import
-`flutter_localizations`, whose delegates do not serve the `material_ui` widgets.
-
-```dart
-MaterialApp(
-  localizationsDelegates: const [
-    Tr.delegate,
-    ...GlobalMaterialLocalizations.delegates,
-  ],
-  supportedLocales: Tr.delegate.supportedLocales,
-  // ...
-);
-```
+Register the four localization delegates (`Tr.delegate`, `GlobalMaterialLocalizations.delegate`,
+`GlobalWidgetsLocalizations.delegate`, `GlobalCupertinoLocalizations.delegate`) and
+`supportedLocales` on the root `MaterialApp`.
 
 ## Assets and themes
 
