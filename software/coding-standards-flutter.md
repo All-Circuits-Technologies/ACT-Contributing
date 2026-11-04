@@ -290,6 +290,52 @@ Choose stream cardinality deliberately: a single-subscription stream for a one-c
 (e.g. a service feeding one BLoC), a broadcast stream when several independent listeners must
 observe the same events.
 
+### RD27 - Subscribe with a documented private method, not a closure
+
+This rule applies to every class and mixin except widgets and their `State` classes: managers,
+services and BLoCs included.
+
+Give a private method as a tear-off (its name without parentheses), never an anonymous function,
+to:
+
+- `Stream.listen`, for each of its `onData`, `onError` and `onDone` callbacks;
+- `addListener` of a `Listenable` (`ChangeNotifier`, `ValueNotifier`, ...).
+
+This private method:
+
+- is named `_on<Event>`, where `<Event>` describes what the source signals, such as
+  `_onCatalogUpdated` or `_onConnectionLost`;
+- has a `///` doc comment stating what the class does when the source signals (RD16);
+- returns `Future<void>` when it is `async` (RD13).
+
+Remove a listener by giving the same tear-off to `removeListener`.
+
+One exception: when the method needs a value the source does not pass, such as a loop variable,
+give an arrow function whose only expression is the call to the private method, with the received
+parameters and the captured value as arguments. To remove a listener added this way, store the
+arrow function in a field and give that field to `removeListener`.
+
+```dart
+// Avoid
+_subscriptions.add(_deviceService.statusStream.listen((status) { /* ... */ }));
+
+// Prefer
+@override
+Future<void> initLifeCycle() async {
+  await super.initLifeCycle();
+  _subscriptions.add(_deviceService.statusStream.listen(_onStatusChanged));
+  for (final device in _deviceService.devices) {
+    _subscriptions.add(device.valueStream.listen((value) => _onDeviceValue(device.id, value)));
+  }
+}
+
+/// Store the new device [status] and log a disconnection.
+void _onStatusChanged(DeviceStatus status) { /* ... */ }
+
+/// Save the [value] measured by the device [deviceId].
+Future<void> _onDeviceValue(String deviceId, double value) async { /* ... */ }
+```
+
 ## Documentation and generated code
 
 ### RD16 - Document every class and member, private ones included
@@ -485,18 +531,21 @@ work in the constructor. Re-`add(const AsyncInitEvent())` to retry initializatio
 ### RFL12 - Bridge external streams into `add(event)`
 
 To bridge an external stream (a service or manager) into a BLoC, subscribe inside
-`registerMixinEvents()` and translate each emission into `add(SomeEvent(...))` - never mutate
-state directly from the listener callback. Track the subscription and cancel it in
-`disposeLifeCycle`/`close`:
+`registerMixinEvents()` with a private method (RD27), which translates each emission into
+`add(SomeEvent(...))` - never mutate state directly from the listener callback. Track the
+subscription and cancel it in `disposeLifeCycle`/`close`:
 
 ```dart
 @override
 void registerMixinEvents() {
   super.registerMixinEvents();
   on<InitDashboardEvent>(_onInitDashboardEvent);
-  _subscriptions.add(_catalogService.stream.listen((e) => add(CatalogUpdatedEvent(e))));
+  _subscriptions.add(_catalogService.stream.listen(_onCatalogUpdated));
   add(const InitDashboardEvent());
 }
+
+/// Translate the [catalog] emitted by the catalog service into a [CatalogUpdatedEvent].
+void _onCatalogUpdated(Catalog catalog) => add(CatalogUpdatedEvent(catalog));
 ```
 
 ### RFL13 - Factor cross-cutting behaviour into a mixin pair
