@@ -51,10 +51,10 @@ implementation lives under a private `src/` folder not imported directly by cons
 Each public class, mixin, enum and extension lives in its own file. Private types (`_Xxx`) that
 only serve that public type may share its file. Typedefs are not concerned.
 
-Two exceptions:
+Three exceptions:
 
-- A `sealed` class and all its subclasses share one file. The main case is a BLoC's events, all in
-  `<feature>_event.dart` (RFL8, RFL22).
+- The events of a BLoC share one file, `<feature>_events.dart` (RFL8, RFL22).
+- A `sealed` class and all its subclasses share one file.
 - A manager's builder stays in the manager's file (RFL16).
 
 ### RD23 - Order class members by kind
@@ -477,17 +477,14 @@ build so changes (theme, locale, screen size) are picked up.
 BLoCs extend `BlocForMixin<S>` from `act_flutter_utility` (not the raw `Bloc<Event, S>`), states
 extend `BlocStateForMixin<S>`, events extend `BlocEventForMixin`.
 
-### RFL8 - Model events as a sealed hierarchy
+### RFL8 - Model one event class per action
 
-Model events as a sealed hierarchy of small, intention-revealing classes (one class per
-user/system action) rather than a single event carrying a discriminant field:
+Model events as small, intention-revealing classes, one class per user or system action, rather
+than a single event carrying a discriminant field. Each event extends `BlocEventForMixin`
+directly:
 
 ```dart
-sealed class DashboardEvent extends BlocEventForMixin {
-  const DashboardEvent();
-}
-
-class ItemSelectedEvent extends DashboardEvent {
+class ItemSelectedEvent extends BlocEventForMixin {
   final int itemId;
 
   const ItemSelectedEvent({required this.itemId});
@@ -699,7 +696,7 @@ lib/
 ### RFL22 - Colocate a BLoC's files with its widget
 
 A widget built around a BLoC keeps its BLoC, event, state and widget files colocated in the same
-feature folder: `<feature>_bloc.dart`, `<feature>_event.dart`, `<feature>_state.dart`,
+feature folder: `<feature>_bloc.dart`, `<feature>_events.dart`, `<feature>_state.dart`,
 `<feature>_widget.dart` (or `_page.dart`/`_ui.dart` for a page).
 
 ### RFL23 - Use consistent role suffixes for artifact names
@@ -707,15 +704,15 @@ feature folder: `<feature>_bloc.dart`, `<feature>_event.dart`, `<feature>_state.
 Use these role suffixes consistently for artifact names (casing itself follows standard
 Dart/Flutter rules):
 
-| Role            | Suffix                                       | Example                 |
-| --------------- | -------------------------------------------- | ----------------------- |
-| Manager builder | `<Manager>Builder`                           | `ServerManagerBuilder`  |
-| Service         | `<Domain>Service`                            | `CatalogService`        |
-| BLoC            | `<Feature>Bloc`                              | `DashboardBloc`         |
-| State           | `<Feature>State`                             | `DashboardState`        |
-| Event           | `<Action>Event`                              | `ItemSelectedEvent`     |
-| Page            | `<Feature>Page` in `<feature>_page.dart`     | `SettingsPage`          |
-| Widget          | `<Feature>Widget` in `<feature>_widget.dart` | `DashboardWidget`       |
+| Role            | Suffix                                       | Example                |
+| --------------- | -------------------------------------------- | ---------------------- |
+| Manager builder | `<Manager>Builder`                           | `ServerManagerBuilder` |
+| Service         | `<Domain>Service`                            | `CatalogService`       |
+| BLoC            | `<Feature>Bloc`                              | `DashboardBloc`        |
+| State           | `<Feature>State`                             | `DashboardState`       |
+| Event           | `<Action>Event`                              | `ItemSelectedEvent`    |
+| Page            | `<Feature>Page` in `<feature>_page.dart`     | `SettingsPage`         |
+| Widget          | `<Feature>Widget` in `<feature>_widget.dart` | `DashboardWidget`      |
 
 ### RFL39 - Show a fatal error page via `UiFatalErrorManager`
 
